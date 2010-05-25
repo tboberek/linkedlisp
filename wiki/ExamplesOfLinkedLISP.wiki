@@ -54,7 +54,7 @@
 )
 
 ;; Example function that uses Java classes to print out the contents
-;; of a CSV File. Note the form for calling object's methods are like
+;; of a CSV File. Note the form for calling object methods are like
 ;; dereferencing statements about a URI.
 (defun printCSV (filename)
  (prefix
