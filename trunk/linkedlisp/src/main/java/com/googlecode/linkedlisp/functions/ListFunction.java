@@ -1,11 +1,12 @@
 package com.googlecode.linkedlisp.functions;
 
+import com.googlecode.linkedlisp.Expression;
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.NoReturnException;
 import com.googlecode.linkedlisp.State;
 
-public class Defun implements Function {
+public class ListFunction implements Function {
 
     private ListExpression params;
 
@@ -13,18 +14,13 @@ public class Defun implements Function {
         params = list;
     }
 
-    public Object evaluate(State s) throws NoReturnException {
-        LispFunction fn = new LispFunction();
-        String name = params.getFirst().getValue(s).toString();
-        fn.setParameterNames((ListExpression)params.get(1));
-        fn.setBody(params.get(2));
-        s.getVariables().put(name, fn);
-        throw new NoReturnException();
+    public Object evaluate(State s) throws Exception {
+        return params;
     }
 
     @Override
     public Object getValue(State s) {
-        return "defun";
+        return "list";
     }
 
 }

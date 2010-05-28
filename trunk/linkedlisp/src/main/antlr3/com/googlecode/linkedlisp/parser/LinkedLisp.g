@@ -20,17 +20,21 @@ import com.googlecode.linkedlisp.*;
 	private OntModel model = ModelFactory.createOntologyModel();
 }
 
-eval returns [ListExpression expr]
-	:	{$expr = new ListExpression();}
-	    (e=exp {expr.append(e);})*
+eval returns [Expression expr]
+	:    e=exp {expr=e;}
 	;
 
 exp returns [Expression exp]
     :    lst=listExp {exp = lst;}
+    |    qe=quoteExp {exp = qe;}
 	|	 v=var {exp = v;}
 	|	 l=literal {exp = l;}
 	; 
 
+quoteExp returns [ListExpression list]
+    :   '\'' e=exp {list = new ListExpression(); list.append(new IDExpression("QUOTE")); list.append(e);}
+    ;
+    
 listExp returns [ListExpression list]
     :   {$list = new ListExpression();}
         '(' (e=exp {list.append(e);})* ')' 
@@ -54,12 +58,15 @@ literal returns [Literal lit]
 	| 	s=str '^^' u=uri {lit = new TypedLiteral(s, u);}
 	| 	INT {lit = new IntLiteral(Long.parseLong($INT.text));}
 	| 	FLOAT {lit = new FloatLiteral(Long.parseLong($FLOAT.text));}
+	|   NIL {lit = null;}
 	;
 
 str returns [String s]
     :   LITERAL {s = $LITERAL.text;}
     ;
 
+NIL :   'nil'
+    ;
 
 ID  :	('a'..'z'|'A'..'Z'|'_'|'!'|'#'..'&'|'*'..'/'|'='..'@') ('a'..'z'|'A'..'Z'|'_'|'0'..'9'|'!'|'#'..'&'|'*'..'/'|'='|'?'|'@')*
     ;

@@ -1,11 +1,12 @@
 package com.googlecode.linkedlisp.functions;
 
+import com.googlecode.linkedlisp.Expression;
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.NoReturnException;
 import com.googlecode.linkedlisp.State;
 
-public class Print implements Function {
+public class Progn implements Function {
 
     private ListExpression params;
 
@@ -14,15 +15,21 @@ public class Print implements Function {
     }
 
     public Object evaluate(State s) throws Exception {
-        for (int i=0; i < params.size(); ++i) {
-            System.out.print(params.get(i).evaluate(s));
+        Object result = null;
+        for (int i=0; i< params.size(); ++i) try {
+            Object o = params.get(i).evaluate(s);
+            if (i == params.size()-1)
+                result = o;
+        } catch (NoReturnException e) {
+            if (i == params.size()-1)
+                throw e;
         }
-        throw new NoReturnException();
+        return result;
     }
-
+    
     @Override
     public Object getValue(State s) {
-        return "print";
+        return "progn";
     }
 
 }

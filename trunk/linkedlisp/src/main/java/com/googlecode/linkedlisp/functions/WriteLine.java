@@ -5,7 +5,7 @@ import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.NoReturnException;
 import com.googlecode.linkedlisp.State;
 
-public class Defun implements Function {
+public class WriteLine implements Function {
 
     private ListExpression params;
 
@@ -13,18 +13,17 @@ public class Defun implements Function {
         params = list;
     }
 
-    public Object evaluate(State s) throws NoReturnException {
-        LispFunction fn = new LispFunction();
-        String name = params.getFirst().getValue(s).toString();
-        fn.setParameterNames((ListExpression)params.get(1));
-        fn.setBody(params.get(2));
-        s.getVariables().put(name, fn);
+    public Object evaluate(State s) throws Exception {
+        for (int i=0; i < params.size(); ++i) {
+            System.out.print(params.get(i).evaluate(s));
+        }
+        System.out.println();
         throw new NoReturnException();
     }
 
     @Override
     public Object getValue(State s) {
-        return "defun";
+        return "write-line";
     }
 
 }

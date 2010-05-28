@@ -13,6 +13,7 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenStream;
 
+import com.googlecode.linkedlisp.functions.Progn;
 import com.googlecode.linkedlisp.functions.Register;
 import com.googlecode.linkedlisp.parser.*;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -40,6 +41,7 @@ public class Main {
         state.getPrefixes().put("java", "java://");
 
         state.getGlobalVariables().put("registerFunction", new Register());
+        state.getGlobalVariables().put("progn", new Progn());
         run(state, Main.class.getResourceAsStream("/init.lisp"));
                 
         String[] justArgs = new String[args.length-1];
@@ -47,6 +49,7 @@ public class Main {
         ListExpression arguments = parseArgs(justArgs);
         state.getGlobalVariables().put("arguments", arguments.evaluate(state));
 
+        
         Object result = run(state, new FileInputStream(args[0]));
         if (result != null) System.out.println(result.toString());
     }
