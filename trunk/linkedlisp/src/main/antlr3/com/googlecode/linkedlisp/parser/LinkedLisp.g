@@ -1,50 +1,65 @@
 grammar LinkedLisp;
-options {
-    output=AST;
-    ASTLabelType=CommonTree;
-}
 
 @header {
 package com.googlecode.linkedlisp.parser;
 
 import java.util.Map;
 import java.util.HashMap;
+import com.googlecode.linkedlisp.*;
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 }
 @lexer::header {
 package com.googlecode.linkedlisp.parser;
+
+import com.googlecode.linkedlisp.*;
+
 }
 
 @members {
-    /** List of function definitions. Must point at the FUNC nodes. */
-    private Map<String,String> prefixes = new HashMap<String,String>();
-    private List<CommonTree> functions = new ArrayList<CommonTree>();
-    
+	private OntModel model = ModelFactory.createOntologyModel();
 }
 
-eval	:	(exp)*
+eval returns [ListExpression expr]
+	:	{$expr = new ListExpression();}
+	    (e=exp {expr.append(e);})*
 	;
 
-exp	:	 '(' exp+ ')' 
-	|	 var
-	|	 literal
+exp returns [Expression exp]
+    :    lst=listExp {exp = lst;}
+	|	 v=var {exp = v;}
+	|	 l=literal {exp = l;}
 	; 
 
-var	:	id
-	|	uri
+listExp returns [ListExpression list]
+    :   {$list = new ListExpression();}
+        '(' (e=exp {list.append(e);})* ')' 
+    ;
+var	returns [Expression exp]
+    :	i=id {exp = i;}
+	|	u=uri {exp = u;}
 	;
 
-id	:	ID
+id	returns [IDExpression idexp]
+    :	ID {idexp = new IDExpression($ID.text);}
 	;
 	
-uri	:	ABSOLUTE_URI 
-	|	PREFIXED_URI
+uri	returns [ResourceExpression expr]
+    :	'<' URI '>' {expr = new ResourceExpression(model.createResource($URI.text));}
+	|	URI {expr = new ResourceExpression($URI.text);}
 	;
 
-literal	:	LITERAL 
-	| 	TYPED_LITERAL 
-	| 	INT 
-	| 	FLOAT
+literal returns [Literal lit]
+    :	s=str {lit = new Literal(s);} 
+	| 	s=str '^^' u=uri {lit = new TypedLiteral(s, u);}
+	| 	INT {lit = new IntLiteral(Long.parseLong($INT.text));}
+	| 	FLOAT {lit = new FloatLiteral(Long.parseLong($FLOAT.text));}
 	;
+
+str returns [String s]
+    :   LITERAL {s = $LITERAL.text;}
+    ;
+
 
 ID  :	('a'..'z'|'A'..'Z'|'_'|'!'|'#'..'&'|'*'..'/'|'='..'@') ('a'..'z'|'A'..'Z'|'_'|'0'..'9'|'!'|'#'..'&'|'*'..'/'|'='|'?'|'@')*
     ;
@@ -58,21 +73,17 @@ FLOAT
     |   ('0'..'9')+ EXPONENT
     ;
 
-ABSOLUTE_URI	:	'<' (ID '://'~('>'|' '|')')*) '>';
-
-PREFIXED_URI
-	:	ID ':' ~('"'|' '|')')+;
+URI
+	:	ID ':' ~('"'|' '|')'|'>')+;
 
 COMMENT
     :   ';;' ~('\n'|'\r')* '\r'? '\n' {$channel=HIDDEN;}
     ;
 
 LITERAL
-    :  '"' ( ESC_SEQ | ~('\\'|'"') )* '"'
+    :  '"' (( ESC_SEQ | ~('\\'|'"') )*) '"' 
+       {setText(getText().substring(1, getText().length()-1));}
     ;
-
-TYPED_LITERAL
-	:	LITERAL '^^' (ABSOLUTE_URI | PREFIXED_URI);
 
 fragment
 EXPONENT : ('e'|'E') ('+'|'-')? ('0'..'9')+ ;
