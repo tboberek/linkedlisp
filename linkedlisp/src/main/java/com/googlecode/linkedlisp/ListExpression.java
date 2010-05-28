@@ -1,11 +1,13 @@
 package com.googlecode.linkedlisp;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ListExpression implements Expression {
 
-    private List<Expression> values = new ArrayList<Expression>();
+    private List<Expression> values = new LinkedList<Expression>();
     
     public ListExpression() {
     }
@@ -14,39 +16,32 @@ public class ListExpression implements Expression {
         this.values = values;
     }
     
-    @Override
-    public Object evaluate(State s) throws Exception {
-        
-        Expression first = getFirst();
-        if (first instanceof ListExpression) {
-            return evaluateAsList(s);
-        }
-
-        Object evaledFirst = first.evaluate(s);
-        if (evaledFirst instanceof Function) {
-            Function f = (Function)evaledFirst;
-            f.setParameters(getRest());
-            return f.evaluate(s);
-        } else {
-            return evaluateAsList(s);
-        }
-    }
-
-    private List<Object> evaluateAsList(State s) throws Exception {
-        List<Object> result = new ArrayList<Object>();
-        for (Expression value : values) {
-            try {
-                result.add(value.evaluate(s));
-            } catch (NoReturnException e) {
-                // Just skip, nothing to add.
-            }
-        }
-        return result;
+    public ListExpression(Expression first, ListExpression rest) {
+        values.add(first);
+        if (rest != null)
+            values.addAll(rest.getValues());
     }
     
+    private List<Expression> getValues() {
+        return values;
+    }
+
+    @Override
+    public Object evaluate(State s) throws Exception {
+        if (values.size() == 0) return null;
+        Expression first = getFirst();
+        Function f = (Function)first.evaluate(s);
+        f.setParameters(getRest());
+        return f.evaluate(s);
+    }
+
     @Override
     public Object getValue(State s) {
-        return values;
+        List<Object> result = new ArrayList<Object>();
+        for (Expression value : values) {
+            result.add(value.getValue(s));
+        }
+        return result;
     }
 
     public void append(Expression exp) {
@@ -54,13 +49,17 @@ public class ListExpression implements Expression {
     }
     
     public Expression getFirst() {
-        return values.get(0);
+        if (values.size() > 0)
+            return values.get(0);
+        else return null;
     }
     
     public ListExpression getRest() {
-        List<Expression> result = new ArrayList<Expression>(values);
-        result.remove(0);
-        return new ListExpression(result);
+        if (values.size() > 1) {
+            List<Expression> result = new ArrayList<Expression>(values);
+            result.remove(0);
+            return new ListExpression(result);
+        } else return null;
     }
     
     public Expression get(int index) {
