@@ -2,10 +2,11 @@ package com.googlecode.linkedlisp;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ListExpression implements Expression {
+public class ListExpression implements Expression, Iterable {
 
     private List<Expression> values = new LinkedList<Expression>();
     
@@ -68,5 +69,10 @@ public class ListExpression implements Expression {
     
     public int size() {
         return values.size();
+    }
+
+    @Override
+    public Iterator iterator() {
+        return values.iterator();
     }
 }

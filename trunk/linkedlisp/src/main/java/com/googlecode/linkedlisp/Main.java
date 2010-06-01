@@ -13,8 +13,8 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenStream;
 
+import com.googlecode.linkedlisp.functions.Defun;
 import com.googlecode.linkedlisp.functions.Progn;
-import com.googlecode.linkedlisp.functions.Register;
 import com.googlecode.linkedlisp.parser.*;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -22,10 +22,6 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 public class Main {
         
     public static void main(String[] args) throws Exception {
-        ANTLRFileStream in = new ANTLRFileStream(args[0]);
-        LinkedLispLexer lexer = new LinkedLispLexer(in);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        LinkedLispParser parser = new LinkedLispParser(tokens);
         State state = new State();
 
         Map<String,String> defaultMappings 
@@ -40,7 +36,7 @@ public class Main {
         state.getPrefixes().put("call", "call://");
         state.getPrefixes().put("java", "java://");
 
-        state.getGlobalVariables().put("registerFunction", new Register());
+        state.getGlobalVariables().put("defun", new Defun());
         state.getGlobalVariables().put("progn", new Progn());
         run(state, Main.class.getResourceAsStream("/init.lisp"));
                 
@@ -56,7 +52,7 @@ public class Main {
 
     private static ListExpression parseArgs(String[] args) throws RecognitionException {
         StringBuilder sb = new StringBuilder();
-        sb.append("(");
+        sb.append("'(");
         for (String s : args) {
             sb.append(" \"");
             sb.append(s);
