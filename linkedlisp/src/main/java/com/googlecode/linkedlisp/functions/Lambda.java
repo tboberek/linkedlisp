@@ -4,9 +4,8 @@ import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.NoReturnException;
 import com.googlecode.linkedlisp.State;
-import com.hp.hpl.jena.rdf.model.Resource;
 
-public class Register implements Function {
+public class Lambda implements Function {
 
     private ListExpression params;
 
@@ -14,16 +13,20 @@ public class Register implements Function {
         params = list;
     }
 
-    public Object evaluate(State s) throws Exception {
-        String name = params.getFirst().getValue(s).toString();
+    public Object evaluate(State s) throws NoReturnException {
         
-        // TODO A lot of this goes away when we add a proper URI resolver for java.
+        // TODO This is just a copy of defun, and not Lambda yet.
+        LispFunction fn = new LispFunction();
+        String name = params.getFirst().getValue(s).toString();
+        fn.setParameterNames((ListExpression)params.get(1));
+        fn.setBody(params.get(2));
+        s.getVariables().put(name, fn);
         throw new NoReturnException();
     }
 
     @Override
     public Object getValue(State s) {
-        return "registerFunction";
+        return "defun";
     }
 
 }
