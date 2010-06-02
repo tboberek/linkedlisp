@@ -15,7 +15,12 @@ public class IDExpression implements Expression {
         return result;
     }
     
-    public Object getValue(State s) {
+    public Object getValue() {
         return value;
     }
+    
+    public String toString() {
+        return getValue().toString();
+    }
+    
 }

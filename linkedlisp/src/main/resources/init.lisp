@@ -7,6 +7,6 @@
  (defun append  java:com.googlecode.linkedlisp.functions.Cons)
  (defun rest  java:com.googlecode.linkedlisp.functions.Cdr)
  (defun first  java:com.googlecode.linkedlisp.functions.Car)
- (defun list  java:com.googlecode.linkedlisp.functions.ListFunction)
+ (defun concatenate  java:com.googlecode.linkedlisp.functions.Concatenate)
  (defun QUOTE  java:com.googlecode.linkedlisp.functions.Quote)
 )

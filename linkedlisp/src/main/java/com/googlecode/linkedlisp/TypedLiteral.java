@@ -1,5 +1,7 @@
 package com.googlecode.linkedlisp;
 
+import java.util.Arrays;
+
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.TypeMapper;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -26,11 +28,12 @@ public class TypedLiteral extends Literal {
             String typeURI = typeRes.getURI();
             TypeMapper mapper = TypeMapper.getInstance();
             RDFDatatype datatype = mapper.getTypeByName(typeURI);
-            return datatype.parse((String) super.getValue(s));
+            return datatype.parse((String) getValue());
         } else return value.getValue();
     }
     
-    public Object getValue(State s) {
-        return evaluate(s);
+    public Object getValue() {
+        return Arrays.asList(new Object[]{super.getValue(), type.getValue()});
     }
+    
 }

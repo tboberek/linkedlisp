@@ -15,6 +15,8 @@ public class State {
     private Map<String, Object> variables = new HashMap<String,Object>();
     private Map<String, URIResolver> uriResolvers = new HashMap<String,URIResolver>();
     private Map<String, Object> globals = new HashMap<String,Object>();
+    private Map<String, Expression> parameters;
+    private ListExpression parameterList;
 
     public State(OntModel m) {
         this.model = m;
@@ -46,12 +48,38 @@ public class State {
         } else return s;
     }
     
-    public State copyForCall() {
+    public Object getVariable(String name) throws Exception {
+        if (parameters.containsKey(name)) {
+            return parameters.get(name).evaluate(this);
+        } else if (getVariables().containsKey(name)){
+            return getVariables().get(name);
+        } else if (getGlobalVariables().containsKey(name)){
+            return getGlobalVariables().get(name);
+        } else return null;
+    }
+    
+    public Expression getParameter(String name) {
+        return parameters.get(name);
+    }
+    
+    public ListExpression getParameterList() {
+        return parameterList;
+    }
+    
+    public State copyForCall(ListExpression params, List<String> paramNames) {
         State copy =  new State();
         copy.globals = this.globals;
         copy.prefixes.putAll(this.prefixes);
         copy.model = this.model;
         copy.uriResolvers = this.uriResolvers;
+        copy.parameters = new HashMap<String, Expression>();
+        if (params != null && paramNames != null) {
+            for (int i=0; i< params.size() && i < paramNames.size(); ++i) {
+                copy.parameters.put(paramNames.get(i), params.get(i));
+            }
+        }
+        
+        copy.parameterList = params;
         
         return copy;
     }

@@ -11,7 +11,7 @@ import com.googlecode.linkedlisp.State;
 import com.googlecode.linkedlisp.util.Sequence;
 import com.hp.hpl.jena.rdf.model.RDFList;
 
-public class Seq implements Function {
+public class Seq extends Function {
 
     private ListExpression params;
 
@@ -20,6 +20,7 @@ public class Seq implements Function {
     }
 
     public Object evaluate(State s) throws Exception {
+        ListExpression params = s.getParameterList();
         Number start = 0;
         Number increment = 1;
         Number end = 0;
@@ -37,7 +38,7 @@ public class Seq implements Function {
     }
 
     @Override
-    public Object getValue(State s) {
+    public Object getValue() {
         return "seq";
     }
 
