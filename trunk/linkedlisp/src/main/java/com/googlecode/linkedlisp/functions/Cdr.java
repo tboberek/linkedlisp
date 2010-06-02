@@ -12,16 +12,10 @@ import com.googlecode.linkedlisp.NoReturnException;
 import com.googlecode.linkedlisp.State;
 import com.hp.hpl.jena.rdf.model.RDFList;
 
-public class Cdr implements Function {
-
-    private ListExpression params;
-
-    public void setParameters(ListExpression list) {
-        params = list;
-    }
+public class Cdr extends Function {
 
     public Object evaluate(State s) throws Exception {
-        Object value = params.get(0).evaluate(s);
+        Object value = s.getParameterList().getFirst().evaluate(s);
         if (value instanceof Collection<?>) {
             List result = new ArrayList((Collection)value);
             result.remove(0);
@@ -39,7 +33,7 @@ public class Cdr implements Function {
     }
 
     @Override
-    public Object getValue(State s) {
+    public Object getValue() {
         return "cons";
     }
 

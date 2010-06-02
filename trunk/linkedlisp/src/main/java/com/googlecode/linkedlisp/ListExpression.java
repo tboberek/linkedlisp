@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ListExpression implements Expression, Iterable {
+public class ListExpression implements Expression, Iterable<Expression> {
 
     private List<Expression> values = new LinkedList<Expression>();
     
@@ -32,15 +32,15 @@ public class ListExpression implements Expression, Iterable {
         if (values.size() == 0) return null;
         Expression first = getFirst();
         Function f = (Function)first.evaluate(s);
-        f.setParameters(getRest());
-        return f.evaluate(s);
+        State newState = s.copyForCall(getRest(),f.getParameterNames());
+        return f.evaluate(newState);
     }
 
     @Override
-    public Object getValue(State s) {
+    public Object getValue() {
         List<Object> result = new ArrayList<Object>();
         for (Expression value : values) {
-            result.add(value.getValue(s));
+            result.add(value.getValue());
         }
         return result;
     }
@@ -72,7 +72,11 @@ public class ListExpression implements Expression, Iterable {
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<Expression> iterator() {
         return values.iterator();
+    }
+    
+    public String toString() {
+        return getValue().toString();
     }
 }

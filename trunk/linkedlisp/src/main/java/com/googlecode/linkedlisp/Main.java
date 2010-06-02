@@ -43,7 +43,7 @@ public class Main {
         String[] justArgs = new String[args.length-1];
         System.arraycopy(args, 1, justArgs, 0, justArgs.length);
         ListExpression arguments = parseArgs(justArgs);
-        state.getGlobalVariables().put("arguments", arguments.evaluate(state));
+        state.getGlobalVariables().put("arguments", arguments.getValue());
 
         
         Object result = run(state, new FileInputStream(args[0]));
@@ -52,7 +52,7 @@ public class Main {
 
     private static ListExpression parseArgs(String[] args) throws RecognitionException {
         StringBuilder sb = new StringBuilder();
-        sb.append("'(");
+        sb.append("(");
         for (String s : args) {
             sb.append(" \"");
             sb.append(s);

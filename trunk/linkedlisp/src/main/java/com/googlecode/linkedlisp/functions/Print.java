@@ -1,27 +1,25 @@
 package com.googlecode.linkedlisp.functions;
 
+import java.util.Arrays;
+
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.NoReturnException;
 import com.googlecode.linkedlisp.State;
 
-public class Print implements Function {
-
-    private ListExpression params;
-
-    public void setParameters(ListExpression list) {
-        params = list;
+public class Print extends Function {
+    public Print() {
+        setParameterNames(Arrays.asList(new String[]{"x"}));
     }
 
     public Object evaluate(State s) throws Exception {
-        for (int i=0; i < params.size(); ++i) {
-            System.out.print(params.get(i).evaluate(s));
-        }
-        throw new NoReturnException();
+        Object value = getVariable(s,0);
+        System.out.print(value);
+        return value;
     }
 
     @Override
-    public Object getValue(State s) {
+    public Object getValue() {
         return "print";
     }
 

@@ -1,5 +1,6 @@
 package com.googlecode.linkedlisp;
 
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class ResourceExpression implements Expression {
@@ -24,9 +25,13 @@ public class ResourceExpression implements Expression {
         return s.resolveResource(resource);
     }
 
-    public Object getValue(State s) {
-        return evaluate(s);
+    public Object getValue() {
+        if (resource == null) {
+            return ModelFactory.createDefaultModel().createResource(uri);
+        } else return resource;
     }
-
+    public String toString() {
+        return getValue().toString();
+    }
     
 }

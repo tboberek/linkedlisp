@@ -1,12 +1,18 @@
 package com.googlecode.linkedlisp.functions;
 
+import java.util.Arrays;
+
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.NoReturnException;
 import com.googlecode.linkedlisp.State;
 
-public class Loop implements Function {
+public class Loop extends Function {
 
+    public Loop() {
+        setParameterNames(Arrays.asList(new String[]{"name","x", "y"}));
+    }
+    
     private ListExpression params;
 
     public void setParameters(ListExpression list) {
@@ -14,21 +20,13 @@ public class Loop implements Function {
     }
 
     public Object evaluate(State s) throws NoReturnException {
-        
-        String loopName = params.get(0).getValue(s).toString();
-        
-        // TODO This is just a copy of defun, and not loop yet.
-        LispFunction fn = new LispFunction();
-        String name = params.getFirst().getValue(s).toString();
-        fn.setParameterNames((ListExpression)params.get(1));
-        fn.setBody(params.get(2));
-        s.getVariables().put(name, fn);
-        throw new NoReturnException();
+        // TODO implement it.
+        return null;
     }
 
     @Override
-    public Object getValue(State s) {
-        return "defun";
+    public Object getValue() {
+        return "loop";
     }
 
 }
