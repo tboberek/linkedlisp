@@ -7,8 +7,8 @@ import com.googlecode.linkedlisp.State;
 
 public class WriteLine extends Function {
 
-    public Object evaluate(State s) throws Exception {
-        Object value = s.getParameterList().getFirst().evaluate(s);
+    public Object execute(State s, ListExpression params) throws Exception {
+        Object value = params.getFirst().evaluate(s);
         System.out.println(value);
         return null;
     }

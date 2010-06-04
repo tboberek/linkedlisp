@@ -11,12 +11,10 @@ import com.hp.hpl.jena.rdf.model.Resource;
 public class State {
 
     private OntModel model = ModelFactory.createOntologyModel();
+    private State rootState = this;
+    private State parentState = null;
     private Map<String, String> prefixes = new HashMap<String,String>();
     private Map<String, Object> variables = new HashMap<String,Object>();
-    private Map<String, URIResolver> uriResolvers = new HashMap<String,URIResolver>();
-    private Map<String, Object> globals = new HashMap<String,Object>();
-    private Map<String, Expression> parameters;
-    private ListExpression parameterList;
 
     public State(OntModel m) {
         this.model = m;
@@ -26,11 +24,12 @@ public class State {
     }
     
     public OntModel getModel() {
-        return model;
+        if (parentState == null) return model;
+        else return rootState.getModel();
     }
     
     public Map<String,Object> getGlobalVariables() {
-        return globals;
+        return rootState.getVariables();
     }
     
     public Map<String,Object> getVariables() {
@@ -41,58 +40,60 @@ public class State {
         return prefixes;
     }
 
+    public State getRootState() {
+        return rootState;
+    }
+    
+    public State getParentState() {
+        return parentState;
+    }
+    
     public String processPrefix(String s) {
         String[] parsed = s.split(":",2);
-        if (parsed.length > 1 && getPrefixes().containsKey(parsed[0])) {
-            return getPrefixes().get(parsed[0])+parsed[1];
-        } else return s;
+        if (parsed.length > 1 )
+            if (getPrefixes().containsKey(parsed[0]))
+                return getPrefixes().get(parsed[0])+parsed[1];
+            else if (parentState != null 
+                && rootState.getPrefixes().containsKey(parsed[0]))
+                return rootState.getPrefixes().get(parsed[0])+parsed[1];
+        return s;
     }
     
     public Object getVariable(String name) throws Exception {
-        if (parameters.containsKey(name)) {
-            return parameters.get(name).evaluate(this);
-        } else if (getVariables().containsKey(name)){
-            return getVariables().get(name);
-        } else if (getGlobalVariables().containsKey(name)){
-            return getGlobalVariables().get(name);
-        } else return null;
-    }
-    
-    public Expression getParameter(String name) {
-        return parameters.get(name);
-    }
-    
-    public ListExpression getParameterList() {
-        return parameterList;
+        Object value = null;
+        if (getVariables().containsKey(name)) {
+            value = getVariables().get(name);
+            if (value instanceof IDExpression && parentState != null) {
+                String nameInParent = ((Expression)value).getValue().toString();
+                value = parentState.getVariable(nameInParent);            
+            } else if (value instanceof Expression) {
+                State forEval = this;
+                if (this.parentState != null) forEval = this.parentState;
+                value = ((Expression)value).evaluate(forEval);
+                getVariables().put(name, value);
+            }
+        } else if (parentState != null){
+            value = rootState.getVariable(name);
+        } 
+
+        return value;
     }
     
     public State copyForCall(ListExpression params, List<String> paramNames) {
         State copy =  new State();
-        copy.globals = this.globals;
+        copy.parentState = this;
+        copy.rootState = this.rootState;
         copy.prefixes.putAll(this.prefixes);
         copy.model = this.model;
-        copy.uriResolvers = this.uriResolvers;
-        copy.parameters = new HashMap<String, Expression>();
+
         if (params != null && paramNames != null) {
             for (int i=0; i< params.size() && i < paramNames.size(); ++i) {
-                copy.parameters.put(paramNames.get(i), params.get(i));
+                Expression parameter = params.get(i);
+                copy.variables.put(paramNames.get(i), parameter);
             }
         }
-        
-        copy.parameterList = params;
         
         return copy;
     }
 
-    public Object resolveResource(Resource resource) {
-        String[] schemeSplit = resource.getURI().split("://",2);
-        if (schemeSplit.length > 1 && getURIResolvers().containsKey(schemeSplit[0])) {
-            return getURIResolvers().get(schemeSplit[0]).resolve(resource);
-        } else return resource;
-    }
-    
-    private Map<String, URIResolver> getURIResolvers() {
-        return uriResolvers;
-    }
-    
 }

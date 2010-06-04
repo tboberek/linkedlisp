@@ -12,8 +12,7 @@ import com.googlecode.linkedlisp.NoReturnException;
 import com.googlecode.linkedlisp.State;
 
 public class Cons extends Function {
-    public Object evaluate(State s) throws Exception {
-        ListExpression params = s.getParameterList();
+    public Object execute(State s, ListExpression params) throws Exception {
         List<Object> result = new ArrayList<Object>();
         result.add(params.get(0).evaluate(s));
         Object cdr = params.get(0).evaluate(s);

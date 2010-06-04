@@ -10,9 +10,8 @@ import com.googlecode.linkedlisp.State;
 
 public class Progn extends Function {
 
-    public Object evaluate(State s) throws Exception {
+    public Object execute(State s, ListExpression params) throws Exception {
         Object result = null;
-        ListExpression params = s.getParameterList();
         params.iterator();
         for (Expression exp : params)  {
             Object o = exp.evaluate(s);

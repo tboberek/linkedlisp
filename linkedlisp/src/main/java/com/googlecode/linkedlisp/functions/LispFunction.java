@@ -11,8 +11,9 @@ public class LispFunction extends Function {
     private Expression body;
 
     @Override
-    public Object evaluate(State s) throws Exception {
-        return body.evaluate(s);
+    public Object execute(State s, ListExpression params) throws Exception {
+        State newState = s.copyForCall(params, getParameterNames());
+        return body.evaluate(newState);
     }
 
     @Override

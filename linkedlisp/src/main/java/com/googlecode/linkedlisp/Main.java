@@ -36,8 +36,8 @@ public class Main {
         state.getPrefixes().put("call", "call://");
         state.getPrefixes().put("java", "java://");
 
-        state.getGlobalVariables().put("defun", new Defun());
-        state.getGlobalVariables().put("progn", new Progn());
+        state.getVariables().put("defun", new Defun());
+        state.getVariables().put("progn", new Progn());
         run(state, Main.class.getResourceAsStream("/init.lisp"));
                 
         String[] justArgs = new String[args.length-1];

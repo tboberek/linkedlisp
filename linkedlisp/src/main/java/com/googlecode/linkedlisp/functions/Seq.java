@@ -19,8 +19,7 @@ public class Seq extends Function {
         params = list;
     }
 
-    public Object evaluate(State s) throws Exception {
-        ListExpression params = s.getParameterList();
+    public Object execute(State s, ListExpression params) throws Exception {
         Number start = 0;
         Number increment = 1;
         Number end = 0;

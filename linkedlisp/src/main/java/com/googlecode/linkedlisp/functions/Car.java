@@ -2,6 +2,7 @@ package com.googlecode.linkedlisp.functions;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Iterator;
 
 import com.googlecode.linkedlisp.Expression;
 import com.googlecode.linkedlisp.Function;
@@ -12,16 +13,26 @@ import com.hp.hpl.jena.rdf.model.RDFList;
 
 public class Car extends Function {
 
-    public Object evaluate(State s) throws Exception {
-        Object value = s.getParameterList().getFirst().evaluate(s);
-        if (value instanceof Iterable) {
-            return ((Iterable)value).iterator().next();
+    public Object execute(State s, ListExpression params) throws Exception {
+        Object value = params.getFirst().evaluate(s);
+        if (value == null) {
+            System.out.println(params.getFirst());
+            return null;
+        }
+        else if (value instanceof Iterable) {
+            Iterator i = ((Iterable)value).iterator();
+            if (i.hasNext()) return i.next();
+            else return null;
         } else if (value.getClass().isArray()) {
-            return Array.get(value, 0);
+            if (Array.getLength(value) > 0)
+                return Array.get(value, 0);
+            else return null;
         } else if (value instanceof RDFList) {
             return ((RDFList)value).getHead();
         } else if (value instanceof String) {
-            return ((String)value).charAt(0);
+            if (((String)value).length() > 0)
+                return ((String)value).charAt(0);
+            else return null;
         } else return value;
     }
 

@@ -19,7 +19,7 @@ public class Loop extends Function {
         params = list;
     }
 
-    public Object evaluate(State s) throws NoReturnException {
+    public Object execute(State s, ListExpression params) throws NoReturnException {
         // TODO implement it.
         return null;
     }
