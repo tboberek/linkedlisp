@@ -32,8 +32,7 @@ public class ListExpression implements Expression, Iterable<Expression> {
         if (values.size() == 0) return null;
         Expression first = getFirst();
         Function f = (Function)first.evaluate(s);
-        State newState = s.copyForCall(getRest(),f.getParameterNames());
-        return f.evaluate(newState);
+        return f.execute(s, getRest());
     }
 
     @Override

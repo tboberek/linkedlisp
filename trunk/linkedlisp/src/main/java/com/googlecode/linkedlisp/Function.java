@@ -3,7 +3,7 @@ package com.googlecode.linkedlisp;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class Function implements Expression {
+public abstract class Function {
     private List<String> parameterNames = Collections.EMPTY_LIST;
 
     public List<String> getParameterNames() {
@@ -14,6 +14,9 @@ public abstract class Function implements Expression {
         this.parameterNames = names;
     }
     
+    public abstract Object execute(State s, ListExpression params) throws Exception;
+
+
     public Object getVariable(State s, int position) throws Exception {
         return s.getVariable(getParameterNames().get(position));
     }
@@ -21,4 +24,6 @@ public abstract class Function implements Expression {
     public String toString() {
         return getValue().toString();
     }
+    
+    public abstract Object getValue();
 }

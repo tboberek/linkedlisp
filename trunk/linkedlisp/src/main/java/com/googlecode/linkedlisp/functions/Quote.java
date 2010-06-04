@@ -8,8 +8,8 @@ import com.googlecode.linkedlisp.State;
 
 public class Quote extends Function {
 
-    public Object evaluate(State s) throws Exception {
-        Expression first = s.getParameterList().getFirst();
+    public Object execute(State s, ListExpression params) throws Exception {
+        Expression first = params.getFirst();
         return first.getValue();
     }
     

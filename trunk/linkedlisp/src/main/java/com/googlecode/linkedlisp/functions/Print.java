@@ -12,7 +12,7 @@ public class Print extends Function {
         setParameterNames(Arrays.asList(new String[]{"x"}));
     }
 
-    public Object evaluate(State s) throws Exception {
+    public Object execute(State s, ListExpression params) throws Exception {
         Object value = getVariable(s,0);
         System.out.print(value);
         return value;

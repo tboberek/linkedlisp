@@ -22,7 +22,7 @@ public class ResourceExpression implements Expression {
             String realURI = s.processPrefix(uri);
             resource = s.getModel().createResource(realURI);
         }
-        return s.resolveResource(resource);
+        return resource;
     }
 
     public Object getValue() {

@@ -3,6 +3,7 @@ package com.googlecode.linkedlisp.functions;
 import java.util.Arrays;
 import java.util.List;
 
+import com.googlecode.linkedlisp.Expression;
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.NoReturnException;
@@ -12,14 +13,13 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 public class Defun extends Function {
 
-    public Object evaluate(State s) throws Exception {
-        ListExpression params = s.getParameterList();
+    public Object execute(State s, ListExpression params) throws Exception {
         
         String name = params.get(0).getValue().toString();
 
-        Object x = params.get(1).evaluate(s);
-        if (x instanceof Resource) {
-            Resource res = (Resource)x;
+        Expression x = params.get(1);
+        if (x instanceof ResourceExpression) {
+            Resource res = (Resource)x.evaluate(s);
             String classURI = res.getURI();
             String[] className = classURI.split("://");
             if (className[0].equals("java")) {
@@ -29,11 +29,13 @@ public class Defun extends Function {
             } else {
                 // TODO: Bind against property URIs.
             }
-        } else {
+        } else if (x instanceof ListExpression){
             LispFunction fn = new LispFunction();
-            fn.setParameterNames((List<String>)x);
+            fn.setParameterNames((List<String>)x.getValue());
             fn.setBody(params.get(2));
             s.getGlobalVariables().put(name, fn);
+        } else {
+            System.err.println("I don't know what to do with this:\t"+x);
         }
         return null;
     }

@@ -13,11 +13,28 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 package com.googlecode.linkedlisp.parser;
 
 import com.googlecode.linkedlisp.*;
+import java.util.Properties;
+import java.io.*;
 
 }
 
 @members {
 	private OntModel model = ModelFactory.createOntologyModel();
+}
+
+@lexer::members {
+
+	public static String escape(String s) {
+        Properties prop = new Properties();
+        try {
+            prop.load(new ByteArrayInputStream(("X=" + s).getBytes("utf8")));
+        } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return prop.getProperty("X");
+    }
 }
 
 eval returns [Expression expr]
@@ -89,7 +106,7 @@ COMMENT
 
 LITERAL
     :  '"' (( ESC_SEQ | ~('\\'|'"') )*) '"' 
-       {setText(getText().substring(1, getText().length()-1));}
+       {setText(escape(getText().substring(1, getText().length()-1)));}
     ;
 
 fragment

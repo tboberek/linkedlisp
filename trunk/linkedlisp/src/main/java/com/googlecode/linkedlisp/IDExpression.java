@@ -7,12 +7,8 @@ public class IDExpression implements Expression {
         this.value = value;
     }
 
-    public Object evaluate(State s) {
-        Object result = s.getVariables().get(value);
-        if (result == null)
-            result = s.getGlobalVariables().get(value);
-        
-        return result;
+    public Object evaluate(State s) throws Exception {
+        return s.getVariable(value);
     }
     
     public Object getValue() {
