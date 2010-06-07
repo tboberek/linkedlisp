@@ -1,7 +1,6 @@
 package com.googlecode.linkedlisp;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,6 +31,10 @@ public class ListExpression implements Expression, Iterable<Expression> {
         if (values.size() == 0) return null;
         Expression first = getFirst();
         Function f = (Function)first.evaluate(s);
+        
+        if(f == null)
+        	throw new RuntimeException("function not found: " + first);
+        
         return f.execute(s, getRest());
     }
 
@@ -75,7 +78,8 @@ public class ListExpression implements Expression, Iterable<Expression> {
         return values.iterator();
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return getValue().toString();
     }
 }

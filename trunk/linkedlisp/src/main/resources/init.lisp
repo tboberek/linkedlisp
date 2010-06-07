@@ -14,4 +14,5 @@
  (defun set  java:com.googlecode.linkedlisp.functions.Set)
  (defun load  java:com.googlecode.linkedlisp.functions.Load)
  (defun prefix  java:com.googlecode.linkedlisp.functions.Prefix)
+ (defun new  java:com.googlecode.linkedlisp.functions.New)
 )

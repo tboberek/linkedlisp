@@ -15,7 +15,8 @@ public class Literal implements Expression {
         return value;
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return getValue().toString();
     }
     

@@ -10,7 +10,8 @@ public class FloatLiteral extends Literal {
         this.value = value;
     }
 
-    public Object evaluate(State s) {
+    @Override
+	public Object evaluate(State s) {
         return value;
     }
     

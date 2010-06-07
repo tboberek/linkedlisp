@@ -30,7 +30,8 @@ public class ResourceExpression implements Expression {
             return ModelFactory.createDefaultModel().createResource(uri);
         } else return resource;
     }
-    public String toString() {
+    @Override
+	public String toString() {
         return getValue().toString();
     }
     

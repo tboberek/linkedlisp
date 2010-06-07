@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.NoReturnException;
 import com.googlecode.linkedlisp.State;
 
 public class Print extends Function {
@@ -12,7 +11,8 @@ public class Print extends Function {
         setParameterNames(Arrays.asList(new String[]{"x"}));
     }
 
-    public Object execute(State s, ListExpression params) throws Exception {
+    @Override
+	public Object execute(State s, ListExpression params) throws Exception {
         Object value = getVariable(s,0);
         System.out.print(value);
         return value;

@@ -3,7 +3,6 @@ package com.googlecode.linkedlisp.functions;
 import com.googlecode.linkedlisp.Expression;
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.NoReturnException;
 import com.googlecode.linkedlisp.State;
 
 public class LispFunction extends Function {
