@@ -12,7 +12,8 @@ public class Lambda extends Function {
     public Lambda() {
         setParameterNames(Arrays.asList(new String[]{}));
     }
-    public Object execute(State s, ListExpression params) throws NoReturnException {
+    @Override
+	public Object execute(State s, ListExpression params) throws NoReturnException {
         // TODO This is just a copy of defun, and not Lambda yet.
         throw new NoReturnException();
     }

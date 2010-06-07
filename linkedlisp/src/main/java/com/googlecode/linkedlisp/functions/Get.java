@@ -16,7 +16,8 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 public class Get extends Function {
 
-    public Object execute(State s, ListExpression params) throws Exception {
+    @Override
+	public Object execute(State s, ListExpression params) throws Exception {
         Object value = params.getFirst().evaluate(s);
         if (value instanceof Resource) {
             return getSemantic((Resource)value, s, params);

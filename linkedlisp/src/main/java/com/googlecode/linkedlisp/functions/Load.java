@@ -8,7 +8,8 @@ import com.hp.hpl.jena.util.FileManager;
 
 public class Load extends Function {
 
-    public Object execute(State s, ListExpression params) throws Exception {
+    @Override
+	public Object execute(State s, ListExpression params) throws Exception {
         Object value = params.getFirst().evaluate(s);
         if (value instanceof Resource) {
             Resource res = (Resource)value;

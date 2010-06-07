@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class Function {
-    private List<String> parameterNames = Collections.EMPTY_LIST;
+    private List<String> parameterNames = Collections.emptyList();
 
     public List<String> getParameterNames() {
         return parameterNames;
@@ -21,7 +21,8 @@ public abstract class Function {
         return s.getVariable(getParameterNames().get(position));
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return getValue().toString();
     }
     

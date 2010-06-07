@@ -1,22 +1,17 @@
 package com.googlecode.linkedlisp;
 
-import java.io.DataInputStream;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.TokenStream;
-
 import com.googlecode.linkedlisp.functions.Defun;
 import com.googlecode.linkedlisp.functions.Progn;
-import com.googlecode.linkedlisp.parser.*;
-import com.hp.hpl.jena.ontology.OntModel;
+import com.googlecode.linkedlisp.parser.LinkedLispLexer;
+import com.googlecode.linkedlisp.parser.LinkedLispParser;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class Main {
@@ -24,7 +19,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         State state = new State();
 
-        Map<String,String> defaultMappings 
+        Map<String,String> defaultMappings
             = ModelFactory.getDefaultModelPrefixes().getNsPrefixMap();
         for (String prefix : defaultMappings.keySet()) {
             String p = prefix.split(":")[0]; // We strip off the ':'s.
@@ -73,6 +68,10 @@ public class Main {
         LinkedLispParser parser = new LinkedLispParser(tokens);
         
         Expression program = parser.eval();
+
+        if(parser.getNumberOfSyntaxErrors() > 0)
+        	throw new RuntimeException("found " + parser.getNumberOfSyntaxErrors() + " syntax error(s)");
+        
         try {
             Object result = program.evaluate(state);
             return result;

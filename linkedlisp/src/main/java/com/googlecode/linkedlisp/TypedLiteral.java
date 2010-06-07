@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.TypeMapper;
-import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class TypedLiteral extends Literal {
@@ -22,7 +21,8 @@ public class TypedLiteral extends Literal {
         this.type = type;
     }
 
-    public Object evaluate(State s) {
+    @Override
+	public Object evaluate(State s) {
         if (value == null) {
             Resource typeRes = (Resource) type.evaluate(s);
             String typeURI = typeRes.getURI();
@@ -32,7 +32,8 @@ public class TypedLiteral extends Literal {
         } else return value.getValue();
     }
     
-    public Object getValue() {
+    @Override
+	public Object getValue() {
         return Arrays.asList(new Object[]{super.getValue(), type.getValue()});
     }
     

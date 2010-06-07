@@ -1,15 +1,9 @@
 package com.googlecode.linkedlisp.functions;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
-
-import com.googlecode.linkedlisp.Expression;
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.NoReturnException;
 import com.googlecode.linkedlisp.State;
 import com.googlecode.linkedlisp.util.Sequence;
-import com.hp.hpl.jena.rdf.model.RDFList;
 
 public class Seq extends Function {
 
@@ -19,7 +13,8 @@ public class Seq extends Function {
         params = list;
     }
 
-    public Object execute(State s, ListExpression params) throws Exception {
+    @Override
+	public Object execute(State s, ListExpression params) throws Exception {
         Number start = 0;
         Number increment = 1;
         Number end = 0;

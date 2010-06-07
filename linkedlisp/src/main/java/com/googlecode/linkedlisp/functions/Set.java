@@ -8,7 +8,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 public class Set extends Function {
 
-    public Object execute(State s, ListExpression params) throws Exception {
+    @Override
+	public Object execute(State s, ListExpression params) throws Exception {
         Object value = params.getFirst().evaluate(s);
         if (value instanceof Resource) {
             return setSemantic((Resource)value, s, params);
