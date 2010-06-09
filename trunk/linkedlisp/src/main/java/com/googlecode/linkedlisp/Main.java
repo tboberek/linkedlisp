@@ -27,8 +27,6 @@ public class Main {
         }
         
         state.getPrefixes().put("xsd", "http://www.w3.org/2001/XMLSchema#");
-        state.getPrefixes().put("prop", "prop://");
-        state.getPrefixes().put("call", "call://");
         state.getPrefixes().put("java", "java://");
 
         state.getVariables().put("defun", new Defun());
