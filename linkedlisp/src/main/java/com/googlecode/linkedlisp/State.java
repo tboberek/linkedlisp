@@ -1,30 +1,53 @@
 package com.googlecode.linkedlisp;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hp.hpl.jena.iri.impl.Parser;
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntModelSpec;
+import com.hp.hpl.jena.rdf.model.InfModel;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.reasoner.Reasoner;
+import com.hp.hpl.jena.reasoner.rulesys.GenericRuleReasoner;
+import com.hp.hpl.jena.reasoner.rulesys.GenericRuleReasonerFactory;
+import com.hp.hpl.jena.reasoner.rulesys.Rule;
+import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
 
 public class State {
 
-    private OntModel model = ModelFactory.createOntologyModel();
+    private Model baseModel = ModelFactory.createDefaultModel();
     private State rootState = this;
     private State parentState = null;
     private Map<String, String> prefixes = new HashMap<String,String>();
     private Map<String, Object> variables = new HashMap<String,Object>();
+    private InfModel model;
 
-    public State(OntModel m) {
+    public State(InfModel m) {
         this.model = m;
     }
     
     public State() {
+        buildDefaultRules();
     }
     
-    public OntModel getModel() {
-        if (parentState == null) return model;
-        else return rootState.getModel();
+    private void buildDefaultRules() {
+        String ruleSrc = "@include <OWLMicro>.";
+        StringReader sr = new StringReader(ruleSrc);
+        List<Rule> r = Rule.rulesParserFromReader(new BufferedReader(sr)).getRulesPreload();
+        GenericRuleReasoner reasoner = new GenericRuleReasoner(r);
+        reasoner.setOWLTranslation(true);
+        reasoner.setTransitiveClosureCaching(true);
+        model = ModelFactory.createInfModel(reasoner, baseModel);
+    }
+    
+    public InfModel getModel() {
+        return model;
     }
     
     public Map<String,Object> getGlobalVariables() {
@@ -93,6 +116,11 @@ public class State {
         }
         
         return copy;
+    }
+
+    public void registerRule(Rule rule) {
+        GenericRuleReasoner reasoner = (GenericRuleReasoner)model.getReasoner();
+        reasoner.getRules().add(rule);
     }
 
 }

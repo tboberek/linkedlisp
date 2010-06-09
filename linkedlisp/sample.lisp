@@ -71,8 +71,9 @@
 (prefix
  ((foaf <http://xmlns.com/foaf/0.1/>)
   (eg <http://www.example.com#>))
- (defun foaf:name (person) when (person rdf:type foaf:Person)
-   (concatenate (person eg:firstName) " " (person eg:lastName))
+ (defun foaf:name (person fn ln) 
+        ((person rdf:type foaf:Person) (person eg:firstName fn) (person eg:lastName ln))
+   (concatenate fn " " ln)
  )
 )
 

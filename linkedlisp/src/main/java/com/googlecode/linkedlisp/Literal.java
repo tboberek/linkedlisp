@@ -7,7 +7,7 @@ public class Literal implements Expression {
         this.value = value;
     }
 
-    public Object evaluate(State s) {
+    public Object evaluate(State s) throws Exception {
         return value;
     }
 

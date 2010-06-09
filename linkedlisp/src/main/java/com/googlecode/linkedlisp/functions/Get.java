@@ -7,7 +7,6 @@ import java.util.List;
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.State;
-import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -31,9 +30,10 @@ public class Get extends Function {
         Resource predicate = null;
         if (params.size() > 1) {
             predicate = (Resource)params.get(1).evaluate(s);
-            List<RDFNode> foo = subject.as(Individual.class).listPropertyValues(predicate.as(Property.class)).toList();
+            List<Statement> foo = subject.listProperties(predicate.as(Property.class)).toList();
             List<Object> result = new ArrayList<Object>(foo.size());
-            for (RDFNode node : foo) {
+            for (Statement stmt : foo) {
+                RDFNode node = stmt.getObject();
                 if (node.isLiteral()) {
                     result.add(node.as(Literal.class).getValue());
                 } else {

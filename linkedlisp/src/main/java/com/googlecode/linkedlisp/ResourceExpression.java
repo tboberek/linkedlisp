@@ -17,10 +17,14 @@ public class ResourceExpression implements Expression {
         this.uri = uri;
     }
     
-    public Object evaluate(State s) {
+    public Object evaluate(State s) throws ClassNotFoundException {
         if (resource == null) {
             String realURI = s.processPrefix(uri);
-            resource = s.getModel().createResource(realURI);
+            if (realURI.startsWith("java://")) {
+                return Class.forName(realURI.substring(7));
+            } else {
+                resource = s.getModel().createResource(realURI);
+            }
         }
         return resource;
     }

@@ -20,10 +20,12 @@ public class Set extends Function {
 
     private Object setSemantic(Resource subject, State s, ListExpression params) throws Exception {
         Property p = ((Resource)params.get(1).evaluate(s)).as(Property.class);
-        Object o = params.get(2).evaluate(s);
-        if (o instanceof Resource)
-            subject.addProperty(p, (Resource)o);
-        else subject.addLiteral(p, o);
+        if (params.size() == 3) {
+            Object o = params.get(2).evaluate(s);
+            if (o instanceof Resource)
+                subject.addProperty(p, (Resource)o);
+            else subject.addLiteral(p, o);
+        }
         return subject;
     }
 

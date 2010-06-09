@@ -22,14 +22,16 @@ public class TypedLiteral extends Literal {
     }
 
     @Override
-	public Object evaluate(State s) {
+	public Object evaluate(State s) throws Exception {
         if (value == null) {
             Resource typeRes = (Resource) type.evaluate(s);
             String typeURI = typeRes.getURI();
             TypeMapper mapper = TypeMapper.getInstance();
             RDFDatatype datatype = mapper.getTypeByName(typeURI);
-            return datatype.parse((String) getValue());
-        } else return value.getValue();
+            value = s.getModel().createTypedLiteral((String)getValue(),datatype);
+        }
+
+        return value.getValue();
     }
     
     @Override
