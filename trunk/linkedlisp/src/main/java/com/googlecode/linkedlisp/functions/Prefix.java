@@ -1,5 +1,7 @@
 package com.googlecode.linkedlisp.functions;
 
+import java.util.Map;
+
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.State;
@@ -13,7 +15,7 @@ public class Prefix extends Function {
     	if(val instanceof String && params.size() == 2) {
 	        String prefixName = (String) val;
 	        Resource prefixResource = (Resource) params.get(1).evaluate(s);
-	        s.getPrefixes().put(prefixName, prefixResource.getURI());
+	        s.setPrefix(prefixName, prefixResource.getURI());
     	} else
     		throw new RuntimeException("TODO");
 

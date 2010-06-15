@@ -3,7 +3,7 @@
     (defun printAll (x)
      (progn (write-line (concatenate (car (car x))
                                      ":\t\t"
-                                     (cdr (car (car x)))
+                                     (car (cdr (car x)))
                         )
             )
             (if (cdr x) (printAll (cdr x)))

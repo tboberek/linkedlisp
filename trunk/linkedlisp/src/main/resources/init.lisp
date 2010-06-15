@@ -18,6 +18,7 @@
  (defun prefix  java:com.googlecode.linkedlisp.functions.Prefix)
  (defun builtin  java:com.googlecode.linkedlisp.functions.Builtin)
  (defun rule  java:com.googlecode.linkedlisp.functions.Rule)
+ (defun bind  java:com.googlecode.linkedlisp.functions.Bind)
  (defun seq  java:com.googlecode.linkedlisp.functions.Seq)
  (defun lambda  java:com.googlecode.linkedlisp.functions.Lambda)
 )

@@ -37,7 +37,7 @@ public class State {
     }
     
     private void buildDefaultRules() {
-        String ruleSrc = "@include <OWLMicro>.";
+        String ruleSrc = "@include <OWLMicro>.\n[ testrule: (?person eg:test ?val) <- (?person foaf:name ?val) ]";
         StringReader sr = new StringReader(ruleSrc);
         List<Rule> r = Rule.rulesParserFromReader(new BufferedReader(sr)).getRulesPreload();
         GenericRuleReasoner reasoner = new GenericRuleReasoner(r);
@@ -62,6 +62,15 @@ public class State {
         return prefixes;
     }
 
+    public void setPrefix(String prefix, String uri) {
+        try {
+            getModel().setNsPrefix(prefix+":", uri);
+        } catch (Exception e) {
+            
+        }
+        prefixes.put(prefix, uri);
+    }
+    
     public State getRootState() {
         return rootState;
     }
@@ -72,12 +81,13 @@ public class State {
     
     public String processPrefix(String s) {
         String[] parsed = s.split(":",2);
-        if (parsed.length > 1 )
+        if (parsed.length > 1 ) {
             if (getPrefixes().containsKey(parsed[0]))
                 return getPrefixes().get(parsed[0])+parsed[1];
             else if (parentState != null 
                 && rootState.getPrefixes().containsKey(parsed[0]))
                 return rootState.getPrefixes().get(parsed[0])+parsed[1];
+        }
         return s;
     }
     

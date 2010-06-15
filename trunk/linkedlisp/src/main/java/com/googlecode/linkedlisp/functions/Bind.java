@@ -21,12 +21,15 @@ public class Bind extends Function {
     
     public Object execute(State s, ListExpression params) throws Exception {
         Resource property = (Resource)params.get(0).evaluate(s);
-        String name = UUID.randomUUID().toString();
+        String name = "binding"+UUID.randomUUID().toString();
         
         ListExpression builtinExpression = new ListExpression();
         builtinExpression.append(new IDExpression(name));
         builtinExpression.append(params.get(2));
-        builtin.execute(s, builtinExpression);
+        FunctionBuiltin fb = (FunctionBuiltin)builtin.execute(s, builtinExpression);
+        Function f = fb.getFunction();
+        
+        List<String> functionParameters = f.getParameterNames();
         
         ListExpression ruleExpression = new ListExpression();
         ruleExpression.append(new IDExpression(name+"Rule"));
@@ -34,15 +37,38 @@ public class Bind extends Function {
         ListExpression head = new ListExpression();
         ListExpression body = new ListExpression();
 
-        String valueVar = UUID.randomUUID().toString();
+        String valueVar = "o";
         
         ListExpression headClause = new ListExpression();
+        headClause.append(new IDExpression(functionParameters.get(0)));
+        headClause.append(new ResourceExpression(property));
+        headClause.append(new IDExpression(valueVar));
         
-        Function function = (Function)params.get(2).evaluate(s);
-        FunctionBuiltin fb = new FunctionBuiltin(function, name, s);
-        BuiltinRegistry.theRegistry.register(fb);
+        head.append(headClause);
+        
+        ListExpression builtinCallParams = new ListExpression();
+        builtinCallParams.append(new IDExpression(valueVar));
+        for (String paramName : functionParameters) {
+            builtinCallParams.append(new IDExpression(paramName));
+        }
 
-        return null;
+        ListExpression builtinCall = new ListExpression();
+        builtinCall.append(new IDExpression(name));
+        builtinCall.append(builtinCallParams);
+        
+        body.append(builtinCall);
+        ListExpression bindingCondition = (ListExpression)params.get(1);
+        for (Expression e : bindingCondition) {
+            body.append(e);
+        }
+        
+        ListExpression r = new ListExpression();
+        r.append(new IDExpression("rule_"+name));
+        r.append(head);
+        r.append(new IDExpression("<-"));
+        r.append(body);
+        
+        return rule.execute(s, r);
     }
 
     @Override

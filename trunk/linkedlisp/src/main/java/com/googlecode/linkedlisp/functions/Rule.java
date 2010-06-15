@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.googlecode.linkedlisp.Expression;
 import com.googlecode.linkedlisp.Function;
+import com.googlecode.linkedlisp.IDExpression;
 import com.googlecode.linkedlisp.ListExpression;
+import com.googlecode.linkedlisp.ResourceExpression;
 import com.googlecode.linkedlisp.State;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -30,7 +32,7 @@ public class Rule extends Function {
             rule = new com.hp.hpl.jena.reasoner.rulesys.Rule(name, a, b);
             rule.setBackward(true);
         }
-
+        System.out.println("Created rule: "+rule.toString());
         if (rule != null) {
             s.registerRule(rule);
         }
@@ -44,9 +46,9 @@ public class Rule extends Function {
             ListExpression clause = (ListExpression)exp;
             if (clause.size() == 3) {
                 
-                TriplePattern entry = new TriplePattern(toNode(clause.get(0).getValue(), s),
-                                                    toNode(clause.get(1).getValue(), s),
-                                                    toNode(clause.get(2).getValue(), s));
+                TriplePattern entry = new TriplePattern(toNode(clause.get(0), s),
+                                                    toNode(clause.get(1), s),
+                                                    toNode(clause.get(2), s));
                 result.add(entry);
             } else if (clause.get(0).getValue().equals("rule")){
                 result.add((com.hp.hpl.jena.reasoner.rulesys.Rule)clause.evaluate(s));
@@ -55,7 +57,7 @@ public class Rule extends Function {
                 List<Node> arguments = new ArrayList<Node>();
                 List args = (List)clause.get(1).getValue();
                 for (Object o : args) {
-                    arguments.add(toNode(o, s));
+                    arguments.add(Node.createVariable(o.toString()));
                 }
                 Functor f = new Functor(functionName,arguments);
                 result.add(f);
@@ -64,11 +66,13 @@ public class Rule extends Function {
         return result;
     }
 
-    private Node toNode(Object o, State s) {
-        if (o instanceof RDFNode) {
-            return ((RDFNode)o).asNode();
+    private Node toNode(Expression exp, State s) throws Exception {
+        if (exp instanceof ResourceExpression) {
+            return ((RDFNode)exp.getValue()).asNode();
+        } else if (exp instanceof IDExpression) {
+            return Node.createVariable(exp.toString());
         } else {
-             return s.getModel().createTypedLiteral(o).asNode();
+            return s.getModel().createTypedLiteral(exp.evaluate(s)).asNode();
         }
     }
 
