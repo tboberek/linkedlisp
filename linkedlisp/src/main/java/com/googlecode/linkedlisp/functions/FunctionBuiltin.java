@@ -18,7 +18,7 @@ import com.hp.hpl.jena.reasoner.rulesys.RuleContext;
 
 public class FunctionBuiltin implements Builtin {
 
-    Function function;
+    private Function function;
     private String name;
     private State parentState;
     
@@ -30,6 +30,7 @@ public class FunctionBuiltin implements Builtin {
 
     @Override
     public boolean bodyCall(Node[] args, int length, RuleContext context) {
+        System.out.println("Calling "+name+ args);
         Node_Variable output = (Node_Variable)args[0];
         ListExpression params = new ListExpression();
         for (int i=1;i< args.length;++i) {
@@ -97,6 +98,10 @@ public class FunctionBuiltin implements Builtin {
     @Override
     public boolean isSafe() {
         return true;
+    }
+
+    public Function getFunction() {
+        return function;
     }
 
 }

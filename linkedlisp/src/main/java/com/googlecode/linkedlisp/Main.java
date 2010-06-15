@@ -19,15 +19,15 @@ public class Main {
     public static void main(String[] args) throws Exception {
         State state = new State();
 
-        Map<String,String> defaultMappings
-            = ModelFactory.getDefaultModelPrefixes().getNsPrefixMap();
-        for (String prefix : defaultMappings.keySet()) {
-            String p = prefix.split(":")[0]; // We strip off the ':'s.
-            state.getPrefixes().put(p, defaultMappings.get(prefix));
-        }
+//        Map<String,String> defaultMappings
+//            = ModelFactory.getDefaultModelPrefixes().getNsPrefixMap();
+//        for (String prefix : defaultMappings.keySet()) {
+//            String p = prefix.split(":")[0]; // We strip off the ':'s.
+//            state.getPrefixes().put(p, defaultMappings.get(prefix));
+//        }
         
-        state.getPrefixes().put("xsd", "http://www.w3.org/2001/XMLSchema#");
-        state.getPrefixes().put("java", "java://");
+        //state.setPrefix("xsd", "http://www.w3.org/2001/XMLSchema#");
+        state.setPrefix("java", "java://");
 
         state.getVariables().put("defun", new Defun());
         state.getVariables().put("progn", new Progn());
