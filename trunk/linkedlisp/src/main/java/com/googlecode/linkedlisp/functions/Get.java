@@ -3,6 +3,7 @@ package com.googlecode.linkedlisp.functions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
@@ -20,6 +21,12 @@ public class Get extends Function {
         Object value = params.getFirst().evaluate(s);
         if (value instanceof Resource) {
             return getSemantic((Resource)value, s, params);
+        } else if (value instanceof List) {
+            int index = ((Number)params.get(1).evaluate(s)).intValue();
+            return ((List)value).get(index);
+        } else if (value instanceof Map) {
+            Object key = params.get(1).evaluate(s);
+            return ((Map)value).get(key);
         } else {
             return getJava(value, s, params);
         }

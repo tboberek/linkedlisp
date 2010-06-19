@@ -56,11 +56,11 @@ public class Bind extends Function {
         builtinCall.append(new IDExpression(name));
         builtinCall.append(builtinCallParams);
         
-        body.append(builtinCall);
         ListExpression bindingCondition = (ListExpression)params.get(1);
         for (Expression e : bindingCondition) {
             body.append(e);
         }
+        body.append(builtinCall);
         
         ListExpression r = new ListExpression();
         r.append(new IDExpression("rule_"+name));

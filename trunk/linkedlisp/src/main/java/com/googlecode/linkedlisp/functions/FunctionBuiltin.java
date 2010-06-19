@@ -15,6 +15,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.reasoner.rulesys.Builtin;
 import com.hp.hpl.jena.reasoner.rulesys.RuleContext;
+import com.hp.hpl.jena.reasoner.rulesys.Node_RuleVariable;
 
 public class FunctionBuiltin implements Builtin {
 
@@ -30,11 +31,18 @@ public class FunctionBuiltin implements Builtin {
 
     @Override
     public boolean bodyCall(Node[] args, int length, RuleContext context) {
-        System.out.println("Calling "+name+ args);
-        Node_Variable output = (Node_Variable)args[0];
+        //System.out.println("Calling "+name+ args);
+        Node output = args[0];
         ListExpression params = new ListExpression();
         for (int i=1;i< args.length;++i) {
-            RDFNode node = parentState.getModel().getRDFNode(args[i]);
+            Node n = args[i];
+            if (n == null) continue;
+            if (n instanceof Node_RuleVariable) {
+                //System.out.println("Derefing "+((Node_Variable)n).getName());
+                n = ((Node_RuleVariable)n).deref();
+            }
+            //System.out.println(n.toString());
+            RDFNode node = parentState.getModel().getRDFNode(n);
             if (node.isResource()) {
                 params.append(new ResourceExpression(node.as(Resource.class)));
             } else if (node.isLiteral()) {

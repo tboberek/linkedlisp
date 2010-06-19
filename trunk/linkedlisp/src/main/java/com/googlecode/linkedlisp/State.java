@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
 
 import com.hp.hpl.jena.iri.impl.Parser;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -15,21 +16,29 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.reasoner.Reasoner;
 import com.hp.hpl.jena.reasoner.rulesys.GenericRuleReasoner;
+import com.hp.hpl.jena.reasoner.rulesys.OWLMicroReasoner;
 import com.hp.hpl.jena.reasoner.rulesys.GenericRuleReasonerFactory;
 import com.hp.hpl.jena.reasoner.rulesys.Rule;
-import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
+import com.hp.hpl.jena.vocabulary.*;
 
 public class State {
+
+    public static final Map<String,String> DEFAULT_PREFIXES = new HashMap<String,String>();
+    static {
+        DEFAULT_PREFIXES.put("rdf", RDF.getURI());
+        DEFAULT_PREFIXES.put("rdfs", RDFS.getURI());
+        DEFAULT_PREFIXES.put("owl", OWL.getURI());
+        DEFAULT_PREFIXES.put("xsd", XSD.getURI());
+    }
 
     private Model baseModel = ModelFactory.createDefaultModel();
     private State rootState = this;
     private State parentState = null;
-    private Map<String, String> prefixes = new HashMap<String,String>();
     private Map<String, Object> variables = new HashMap<String,Object>();
     private InfModel model;
 
-    public State(InfModel m) {
-        this.model = m;
+    public State(Model m) {
+        this.baseModel = m;
     }
     
     public State() {
@@ -37,17 +46,22 @@ public class State {
     }
     
     private void buildDefaultRules() {
-        String ruleSrc = "@include <OWLMicro>.\n[ testrule: (?person eg:test ?val) <- (?person foaf:name ?val) ]";
-        StringReader sr = new StringReader(ruleSrc);
-        List<Rule> r = Rule.rulesParserFromReader(new BufferedReader(sr)).getRulesPreload();
+        List<Rule> r = new ArrayList<Rule>(OWLMicroReasoner.loadRules());
         GenericRuleReasoner reasoner = new GenericRuleReasoner(r);
         reasoner.setOWLTranslation(true);
         reasoner.setTransitiveClosureCaching(true);
         model = ModelFactory.createInfModel(reasoner, baseModel);
+        setPrefix("rdf", RDF.getURI());
+        setPrefix("rdfs", RDFS.getURI());
+        setPrefix("owl", OWL.getURI());
+        setPrefix("xsd", XSD.getURI());
+        System.out.println(getPrefixes());
     }
     
     public InfModel getModel() {
-        return model;
+        if (parentState == null)
+            return model;
+        else return rootState.getModel();
     }
     
     public Map<String,Object> getGlobalVariables() {
@@ -59,16 +73,15 @@ public class State {
     }
     
     public Map<String,String> getPrefixes() {
-        return prefixes;
+        return getModel().getNsPrefixMap();
     }
 
     public void setPrefix(String prefix, String uri) {
         try {
-            getModel().setNsPrefix(prefix+":", uri);
+            getModel().setNsPrefix(prefix, uri);
         } catch (Exception e) {
-            
+            e.printStackTrace();
         }
-        prefixes.put(prefix, uri);
     }
     
     public State getRootState() {
@@ -112,11 +125,9 @@ public class State {
     }
     
     public State copyForCall(ListExpression params, List<String> paramNames) {
-        State copy =  new State();
+        State copy =  new State(baseModel);
         copy.parentState = this;
         copy.rootState = this.rootState;
-        copy.prefixes.putAll(this.prefixes);
-        copy.model = this.model;
 
         if (params != null && paramNames != null) {
             for (int i=0; i< params.size() && i < paramNames.size(); ++i) {
@@ -129,8 +140,15 @@ public class State {
     }
 
     public void registerRule(Rule rule) {
-        GenericRuleReasoner reasoner = (GenericRuleReasoner)model.getReasoner();
-        reasoner.getRules().add(rule);
+        if (parentState != null) rootState.registerRule(rule);
+        else {
+            GenericRuleReasoner reasoner = (GenericRuleReasoner)model.getReasoner();
+            List<Rule> rules = new ArrayList<Rule>(reasoner.getRules());
+            rules.add(rule);
+            System.out.println("Added Rule:\t"+rule.toString());
+            reasoner.setRules(rules);
+            model = ModelFactory.createInfModel(reasoner, baseModel);
+        }
     }
 
 }
