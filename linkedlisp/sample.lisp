@@ -68,13 +68,9 @@
 )))))
 
 ;; Binding a function to a property based on the type of the entity.
-(prefix
- ((foaf <http://xmlns.com/foaf/0.1/>)
-  (eg <http://www.example.com#>))
- (defun foaf:name (person fn ln) 
-        ((person rdf:type foaf:Person) (person eg:firstName fn) (person eg:lastName ln))
-   (concatenate fn " " ln)
- )
+(bind foaf:name  
+      ((person rdf:type foaf:Person) (person eg:firstName fn) (person eg:lastName ln))
+      (lambda (person fn ln) (concatenate fn " " ln))
 )
 
 ;; Binding based on available knowledge. Its not bound if the needed

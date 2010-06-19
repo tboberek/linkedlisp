@@ -1,14 +1,38 @@
 (progn 
 
+    (defun label (x) (get rdfs:label x) )
+
+    (bind <http://www.w3.org/2000/01/rdf-schema#label> 
+;;          ( (noValue (x <http://www.w3.org/2000/01/rdf-schema#label>))) 
+          ( (print (x))) 
+          (lambda (x) 
+            (concatenate x)
+;;            (replace (replace (last (split x "[:#]")) 
+;;                            "_" " " ) 
+;;                   "(\\w)([A-Z][a-z0-9])" "\\1 \\2")
+          )
+    )
+
+;;     (defun label (x) 
+;;       (if (get rdfs:label x) 
+;;           (get rdfs:label x) 
+;;           (replace (replace (last (split x "[:#]")) 
+;;                             "_" " " ) 
+;;                    "(\\w)([A-Z][a-z0-9])" "\\1 \\2")
+;;       )
+;;     )
+
     (defun printAll (x)
-     (progn (write-line (concatenate (car (car x))
-                                     ":\t\t"
-                                     (car (cdr (car x)))
+     (progn (write-line (concatenate (label (last (get (car x) 1)))
+                                     "    "
+                                     (get (car x) 2)
                         )
             )
             (if (cdr x) (printAll (cdr x)))
      )
     )
+    
+    (write-line rdfs:label)
 
     ;; Biology example that dereferences and prints all information about
     ;; a gene.
@@ -20,7 +44,7 @@
                              ":"
                 )
     )
-    (printAll (get geneid:3098))
+    (printAll (find geneid:3098 nil nil))
     
     ;; FOAF (Friend Of A Friend) example that dereferences and prints all
     ;; information about a person.

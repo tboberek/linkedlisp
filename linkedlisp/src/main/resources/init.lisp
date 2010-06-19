@@ -7,10 +7,12 @@
  (defun append  java:com.googlecode.linkedlisp.functions.Cons)
  (defun rest  java:com.googlecode.linkedlisp.functions.Cdr)
  (defun first  java:com.googlecode.linkedlisp.functions.Car)
+ (defun last  java:com.googlecode.linkedlisp.functions.Last)
  (defun concatenate  java:com.googlecode.linkedlisp.functions.Concatenate)
  (defun if  java:com.googlecode.linkedlisp.functions.If)
  (defun QUOTE  java:com.googlecode.linkedlisp.functions.Quote)
  (defun get  java:com.googlecode.linkedlisp.functions.Get)
+ (defun find  java:com.googlecode.linkedlisp.functions.Find)
  (defun set  java:com.googlecode.linkedlisp.functions.Set)
  (defun new  java:com.googlecode.linkedlisp.functions.New)
  (defun unset  java:com.googlecode.linkedlisp.functions.UnSet)
@@ -21,4 +23,9 @@
  (defun bind  java:com.googlecode.linkedlisp.functions.Bind)
  (defun seq  java:com.googlecode.linkedlisp.functions.Seq)
  (defun lambda  java:com.googlecode.linkedlisp.functions.Lambda)
+
+ (defun split  java:com.googlecode.linkedlisp.functions.Split)
+ (defun replace  java:com.googlecode.linkedlisp.functions.Replace)
+ (defun regex  java:com.googlecode.linkedlisp.functions.Replace)
+
 )
