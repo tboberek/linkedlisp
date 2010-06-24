@@ -123,6 +123,11 @@ public class State {
 
         return value;
     }
+
+	public Object setVariable(String name, Object value) throws Exception {
+		getVariables().put (name, value);
+		return value;
+	}
     
     public State copyForCall(ListExpression params, List<String> paramNames) {
         State copy =  new State(baseModel);
