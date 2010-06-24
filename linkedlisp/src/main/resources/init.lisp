@@ -29,4 +29,5 @@
  (defun regex  java:com.googlecode.linkedlisp.functions.Replace)
 
  (defun % java:com.googlecode.linkedlisp.functions.Mod)
+ (defun setf java:com.googlecode.linkedlisp.functions.Setf)
 )
