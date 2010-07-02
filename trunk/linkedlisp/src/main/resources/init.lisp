@@ -28,6 +28,11 @@
  (defun replace  java:com.googlecode.linkedlisp.functions.Replace)
  (defun regex  java:com.googlecode.linkedlisp.functions.Replace)
 
+ (defun + java:com.googlecode.linkedlisp.functions.Plus)
+ (defun - java:com.googlecode.linkedlisp.functions.Minus)
+ (defun / java:com.googlecode.linkedlisp.functions.Divide)
+ (defun * java:com.googlecode.linkedlisp.functions.Multiply)
  (defun % java:com.googlecode.linkedlisp.functions.Mod)
+
  (defun setf java:com.googlecode.linkedlisp.functions.Setf)
 )
