@@ -1,32 +1,38 @@
 package com.googlecode.linkedlisp.functions;
 
-import java.util.Arrays;
-
-import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
+import com.googlecode.linkedlisp.ArithmeticFunction;
 import com.googlecode.linkedlisp.State;
+import com.googlecode.linkedlisp.ListExpression;
 
-public class Mod extends Function {
-    public Mod() {
-    }
+public class Mod extends ArithmeticFunction {
+	public Mod() {
+	}
 
-    @Override
+	@Override
+	public Object getValue() {
+		return "%";
+	}
+
+	@Override
 	public Object execute(State s, ListExpression params) throws Exception {
-		// First, get the string values of the parameters
-		String first	= (String) params.get(0).getValue();
-		String second	= (String) params.get(1).getValue();
+		// Mod only takes two parameters
+		if (params.size() > 2)
+		{
+			throw new Exception();
+		}
 
-		// Then, attempt to convert the values into floats
-		Float firstNum	= Float.valueOf(first.trim()).floatValue();
-		Float secondNum = Float.valueOf(second.trim()).floatValue();
+		Float first 	= evaluateToFloat (s, params.get(0));
+		Float second	= evaluateToFloat (s, params.get(1));
 
-		// Now actually calculate mod
-        return firstNum % secondNum;
-    }
+		return first % second;
 
-    @Override
-    public Object getValue() {
-        return "print";
-    }
+	}
+
+	public Float operation (Float current, Float factor) {
+		// This is a no-op for this class - we completely
+		// override execute to handle modulus correctly
+		return 0f;
+	}
 
 }
+
