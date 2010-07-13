@@ -33,6 +33,10 @@
  (defun / java:com.googlecode.linkedlisp.functions.Divide)
  (defun * java:com.googlecode.linkedlisp.functions.Multiply)
  (defun % java:com.googlecode.linkedlisp.functions.Mod)
+ 
+ (defun and java:com.googlecode.linkedlisp.functions.And)
+ (defun or  java:com.googlecode.linkedlisp.functions.Or)
+ (defun not java:com.googlecode.linkedlisp.functions.Not)
 
  (defun setf java:com.googlecode.linkedlisp.functions.Setf)
 )
