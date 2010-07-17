@@ -40,5 +40,7 @@
 
  (defun = java:com.googlecode.linkedlisp.functions.Equal)
 
+ (defun loop java:com.googlecode.linkedlisp.functions.Loop)
+
  (defun setf java:com.googlecode.linkedlisp.functions.Setf)
 )
