@@ -23,15 +23,15 @@ import com.hp.hpl.jena.vocabulary.*;
 
 public class State {
 
-    public static final Map<String,String> DEFAULT_PREFIXES = new HashMap<String,String>();
-    static {
-        DEFAULT_PREFIXES.put("rdf", RDF.getURI());
-        DEFAULT_PREFIXES.put("rdfs", RDFS.getURI());
-        DEFAULT_PREFIXES.put("owl", OWL.getURI());
-        DEFAULT_PREFIXES.put("xsd", XSD.getURI());
-    }
+//    public static final Map<String,String> DEFAULT_PREFIXES = new HashMap<String,String>();
+//    static {
+//        DEFAULT_PREFIXES.put("rdf", RDF.getURI());
+//        DEFAULT_PREFIXES.put("rdfs", RDFS.getURI());
+//        DEFAULT_PREFIXES.put("owl", OWL.getURI());
+//        DEFAULT_PREFIXES.put("xsd", XSD.getURI());
+//    }
 
-    private Model baseModel = ModelFactory.createDefaultModel();
+    private Model baseModel = null;
     private State rootState = this;
     private State parentState = null;
     private Map<String, Object> variables = new HashMap<String,Object>();
@@ -42,20 +42,14 @@ public class State {
     }
     
     public State() {
-        buildDefaultRules();
     }
     
-    private void buildDefaultRules() {
+    public void setModel(Model m) {
+        baseModel = m;
         List<Rule> r = new ArrayList<Rule>(OWLMicroReasoner.loadRules());
         GenericRuleReasoner reasoner = new GenericRuleReasoner(r);
         reasoner.setOWLTranslation(true);
         reasoner.setTransitiveClosureCaching(true);
-        model = ModelFactory.createInfModel(reasoner, baseModel);
-        setPrefix("rdf", RDF.getURI());
-        setPrefix("rdfs", RDFS.getURI());
-        setPrefix("owl", OWL.getURI());
-        setPrefix("xsd", XSD.getURI());
-        System.out.println(getPrefixes());
     }
     
     public InfModel getModel() {
