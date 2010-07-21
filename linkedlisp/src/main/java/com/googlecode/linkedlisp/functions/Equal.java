@@ -12,7 +12,9 @@ public class Equal extends ComparisonFunction {
 	}
 
 	public boolean operation (Object first, Object second) {
-		return (first == second);
+            if (first != null)
+		return first.equals(second);
+            else return second == null;
 	}
 }
 

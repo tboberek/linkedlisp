@@ -23,6 +23,7 @@
  (defun bind  java:com.googlecode.linkedlisp.functions.Bind)
  (defun seq  java:com.googlecode.linkedlisp.functions.Seq)
  (defun lambda  java:com.googlecode.linkedlisp.functions.Lambda)
+ (defun let  java:com.googlecode.linkedlisp.functions.Let)
 
  (defun split  java:com.googlecode.linkedlisp.functions.Split)
  (defun replace  java:com.googlecode.linkedlisp.functions.Replace)
