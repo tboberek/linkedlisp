@@ -41,7 +41,7 @@ import java.io.*;
 }
 
 eval returns [Expression expr]
-	:    e=exp {expr=e;}
+	:    e=exp {expr=e;} EOF
 	;
 
 exp returns [Expression exp]

@@ -1,25 +1,16 @@
 package com.googlecode.linkedlisp.functions;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.IDExpression;
 import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.State;
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
 
 public class New extends Function {
 
-    public Object execute(State s, ListExpression params) throws Exception {
+    @Override
+	public Object execute(State s, ListExpression params) throws Exception {
         Object value = params.getFirst().evaluate(s);
         if (value instanceof Class){
             return newJava((Class)value, s, params);
@@ -40,14 +31,49 @@ public class New extends Function {
 
     // Look at http://commons.apache.org/beanutils/v1.8.3/apidocs/org/apache/commons/beanutils/ConstructorUtils.html
     private Object newJava(Class clazz, State s, ListExpression params) throws Exception {
-        
-        if(params.get(1) instanceof IDExpression) {
-            Object p1 = ((IDExpression) params.get(1)).evaluate(s);
-            Constructor<?> cons = clazz.getConstructor(p1.getClass());
-            return cons.newInstance(p1);
-        }
-        
-        throw new RuntimeException("TODO");
+
+    	Object[] objs = new Object[params.size() - 1];
+    	Class[] classes = new Class[params.size() - 1];
+    	for(int x = 1; x < params.size(); x++) {
+    		objs[x - 1] = params.get(x).evaluate(s);
+    		classes[x - 1] = objs[x - 1].getClass();
+    	}
+    	
+    	try {
+	    	Constructor<?> cons = clazz.getConstructor(classes);
+	        return cons.newInstance(objs);
+    	} catch (NoSuchMethodException e) {
+    		Constructor bestCons = null;
+    		int bestScore = Integer.MAX_VALUE;
+    		
+    		// no exact match, let's try some heuristic
+    		// find a compatible constructor, breaking up ties based on minimizing the number of upcasts
+    		consLoop:
+    		for(Constructor c : clazz.getConstructors()) {
+    			if(c.getParameterTypes().length == classes.length) {
+    				int score = 0;
+    				for(int x = 0; x < classes.length; x++) {
+    					if(!c.getParameterTypes()[x].isAssignableFrom(classes[x]))
+    						continue consLoop;
+    					
+    					
+    					for(Class tempClass = classes[x]; !tempClass.equals(c.getParameterTypes()[x]); score++, tempClass = tempClass.getSuperclass() )
+    					{}
+    				}
+    				
+        			if(score < bestScore) {
+        				bestScore = score;
+        				bestCons = c;
+        			}
+    			}
+    		}
+    		
+    		if(bestCons != null)
+    			return bestCons.newInstance(objs);
+
+    		// got nothing
+    		throw e;
+    	}
     }
 
     @Override

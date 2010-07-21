@@ -1,24 +1,17 @@
 package com.googlecode.linkedlisp.functions;
 
-import java.util.List;
-
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.State;
-import com.googlecode.linkedlisp.TypedLiteral;
-import com.hp.hpl.jena.datatypes.RDFDatatype;
-import com.hp.hpl.jena.datatypes.TypeMapper;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.InfModel;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
 
 public class UnSet extends Function {
 
-    public Object execute(State s, ListExpression params) throws Exception {
+    @Override
+	public Object execute(State s, ListExpression params) throws Exception {
         Object value = params.getFirst().evaluate(s);
         if (value instanceof Resource) {
             return unsetSemantic((Resource)value, s, params);
@@ -35,7 +28,7 @@ public class UnSet extends Function {
                 Object o = params.get(i).evaluate(s);
                 RDFNode obj = null;
                 if (o instanceof RDFNode) {
-                    obj = (RDFNode)obj;
+                    obj = (RDFNode)o;
                 }
                 else {
                     obj = model.createTypedLiteral(o);
