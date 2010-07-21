@@ -1,6 +1,6 @@
 #!/bin/sh
 
-JAVA_OPTS="-Xmx2g -Xss512m"
+JAVA_OPTS="-Xmx2g"
 LIBDIR=target/dependency/
 CLASSPATH=`find $LIBDIR -name \*.jar -exec echo -n {}: ';'`:target/linkedlisp-1.0-SNAPSHOT.jar
 
