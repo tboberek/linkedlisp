@@ -25,17 +25,18 @@ import java.io.*;
 @lexer::members {
 
 	public static String escape(String s) {
-        return s.replaceAll("\\n","\t").replaceAll("\\t","\t");
+        //return s.replaceAll("\\n","\t").replaceAll("\\t","\t");
         // This is broken WRT leading and trailing spaces.
-//         Properties prop = new Properties();
-//         try {
-//             prop.load(new ByteArrayInputStream(("X=" + s+).getBytes("utf8")));
-//         } catch (UnsupportedEncodingException ex) {
-//             ex.printStackTrace();
-//         } catch (IOException ex) {
-//             ex.printStackTrace();
-//         }
-//         return prop.getProperty("X");
+        Properties prop = new Properties();
+        try {
+            prop.load(new ByteArrayInputStream(("X=:|:" + s+":|:").getBytes("utf8")));
+        } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        String value = prop.getProperty("X");
+        return value.substring(3,value.length()-3);
     }
 }
 

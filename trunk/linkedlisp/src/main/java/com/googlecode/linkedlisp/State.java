@@ -144,6 +144,19 @@ public class State {
         return copy;
     }
 
+    public State copyForLet(ListExpression mappings) throws Exception {
+        State copy =  new State(baseModel);
+        copy.parentState = this;
+        copy.rootState = this.rootState;
+        copy.variables.putAll(this.variables);
+
+        for (Expression mapping : mappings) {
+            ListExpression m = (ListExpression)mapping;
+            copy.variables.put((String)m.get(0).getValue(), m.get(1).evaluate(this));
+        }
+        return copy;
+    }
+
     public void registerRule(Rule rule) {
         if (parentState != null) rootState.registerRule(rule);
         else {

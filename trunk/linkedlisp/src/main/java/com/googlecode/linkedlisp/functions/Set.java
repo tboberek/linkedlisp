@@ -14,20 +14,25 @@ public class Set extends Function {
 
     @Override
 	public Object execute(State s, ListExpression params) throws Exception {
-        Object value = params.getFirst().evaluate(s);
-        if (value instanceof Resource) {
-            return setSemantic((Resource)value, s, params);
-        } else if (value instanceof List) {
-            int index = ((Number)params.get(1).evaluate(s)).intValue();
-            Object val = params.get(2).evaluate(s);
-            return ((List)value).set(index, value);
-        } else if (value instanceof Map) {
-            Object key = params.get(1).evaluate(s);
-            Object val = params.get(2).evaluate(s);
-            return ((Map)value).put(key, value);
-        } else {
-            return setJava(value, s, params);
-        }
+        if (params.size() > 2) {
+            Object value = params.getFirst().evaluate(s);
+            if (value instanceof Resource) {
+                return setSemantic((Resource)value, s, params);
+            } else if (value instanceof List) {
+                int index = ((Number)params.get(1).evaluate(s)).intValue();
+                Object val = params.get(2).evaluate(s);
+                return ((List)value).set(index, value);
+            } else if (value instanceof Map) {
+                Object key = params.get(1).evaluate(s);
+                Object val = params.get(2).evaluate(s);
+                return ((Map)value).put(key, value);
+            } else {
+                return setJava(value, s, params);
+            }
+        } else if (params.size() == 2) {
+            return s.getVariables().put((String)params.get(0).getValue(),
+                                        params.get(1).evaluate(s));
+        } else return null;
     }
 
     private Object setSemantic(Resource subject, State s, ListExpression params) throws Exception {

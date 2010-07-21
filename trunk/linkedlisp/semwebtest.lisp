@@ -1,26 +1,16 @@
 (progn 
 
-    (defun label (x) (get rdfs:label x) )
-
-    (bind <http://www.w3.org/2000/01/rdf-schema#label> 
-;;          ( (noValue (x <http://www.w3.org/2000/01/rdf-schema#label>))) 
-          ( (print (x))) 
-          (lambda (x) 
+    (defun label (x) 
+      (let ( (l (get rdfs:label x)) ) 
+        (if l 
+            l 
             (concatenate x)
-;;            (replace (replace (last (split x "[:#]")) 
+;;            (replace (replace (last (split (concatenate x) "[:#]")) 
 ;;                            "_" " " ) 
 ;;                   "(\\w)([A-Z][a-z0-9])" "\\1 \\2")
-          )
+        )
+      )
     )
-
-;;     (defun label (x) 
-;;       (if (get rdfs:label x) 
-;;           (get rdfs:label x) 
-;;           (replace (replace (last (split x "[:#]")) 
-;;                             "_" " " ) 
-;;                    "(\\w)([A-Z][a-z0-9])" "\\1 \\2")
-;;       )
-;;     )
 
     (defun printAll (x)
      (progn (write-line (concatenate (label (last (get (car x) 1)))
