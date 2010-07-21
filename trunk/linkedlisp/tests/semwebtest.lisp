@@ -1,29 +1,5 @@
 (progn 
 
-    (defun label (x) 
-      (let ( (l (get rdfs:label x)) ) 
-        (if l 
-            l 
-            (concatenate x)
-;;            (replace (replace (last (split (concatenate x) "[:#]")) 
-;;                            "_" " " ) 
-;;                   "(\\w)([A-Z][a-z0-9])" "\\1 \\2")
-        )
-      )
-    )
-
-    (defun printAll (x)
-     (progn (write-line (concatenate (label (last (get (car x) 1)))
-                                     "    "
-                                     (get (car x) 2)
-                        )
-            )
-            (if (cdr x) (printAll (cdr x)))
-     )
-    )
-    
-    (write-line rdfs:label)
-
     ;; Biology example that dereferences and prints all information about
     ;; a gene.
     (prefix sc <http://bio2rdf.org/sciencecommons_ontology:>)
@@ -34,13 +10,7 @@
                              ":"
                 )
     )
-    (printAll (find geneid:3098 nil nil))
-    
-    ;; FOAF (Friend Of A Friend) example that dereferences and prints all
-    ;; information about a person.
-;;    (prefix foaf <http://xmlns.com/foaf/0.1/>)
-;;    (prefix tw <http://tw.rpi.edu/wiki/Special:URIResolver/>)
-;;    (load <http://tw.rpi.edu/wiki/Special:ExportRDF/James_McCusker>)
-;;    (write-line (concatenate "Facts about " (get tw:James_McCusker foaf:name) ":"))
-;;    (printAll (get tw:James_McCusker))
+    (for stmt in (find geneid:3098 nil nil)
+	 (write-line (concatenate (get stmt 1) "\t" (last stmt)))
+    )
 )
