@@ -50,6 +50,7 @@ public class State {
         GenericRuleReasoner reasoner = new GenericRuleReasoner(r);
         reasoner.setOWLTranslation(true);
         reasoner.setTransitiveClosureCaching(true);
+        model = ModelFactory.createInfModel(reasoner, baseModel);
     }
     
     public InfModel getModel() {

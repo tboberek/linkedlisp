@@ -32,7 +32,7 @@ public class Main {
         String[] justArgs = new String[args.length-1];
         System.arraycopy(args, 1, justArgs, 0, justArgs.length);
         ListExpression arguments = parseArgs(justArgs);
-        state.getGlobalVariables().put("arguments", arguments.getValue());
+        state.getGlobalVariables().put("args", arguments.getValue());
 
         
         Object result = run(state, new FileInputStream(args[0]));

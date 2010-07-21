@@ -1,1 +1,1 @@
-(print arguments)
+(write-line args)

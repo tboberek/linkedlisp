@@ -26,13 +26,18 @@ public class Find extends Function {
         RDFNode o = null;
         if (params.size() > 2 && params.get(2) != null)
             o = toNode(params.get(2).evaluate(state), state);
+        //System.out.println("Searching for "+s+"\t"+p+"\t"+o);
         List result = new ArrayList();
-        for (Statement stmt : state.getModel().listStatements(s,p,o).toList()) {
-            result.add(Arrays.asList(new Object[]{
-                        stmt.getSubject(),stmt.getPredicate(),
-                        stmt.getObject().isLiteral() ?
-                        stmt.getLiteral() :
-                        stmt.getResource()}));
+        List<Statement> stmtList = state.getModel().listStatements(s,p,o).toList();
+        //System.out.println("Found "+stmtList.size()+" statements.");
+        for (Statement stmt : stmtList) {
+            List<Object> statement = Arrays.asList(new Object[]{
+                    stmt.getSubject(),stmt.getPredicate(),
+                    stmt.getObject().isLiteral() ?
+                            stmt.getLiteral().getValue() :
+                                stmt.getResource()});
+//            System.out.println(statement);
+            result.add(statement);
         }
         return result;
     }
