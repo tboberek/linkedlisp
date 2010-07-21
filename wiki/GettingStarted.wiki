@@ -1,0 +1,7 @@
+#summary A 5 minute introduction to Linked LISP
+
+= Introduction =
+
+Linked LISP is LISP + [http://linkeddata.org Linked Data] + Java. That was easy. But what do we mean by that? Linked LISP is a LISP implementation that has a "baked-in" understanding of the Semantic Web and Linked Data. At its core is the Java library for the semantic web, [http://jena.sourceforge.net Jena], and allows users to collect and manipulate data that is published to the Semantic Web.
+
+In basic terms, everything in the semantic web is expressed as a three-tuple, or triple (sometimes it's a quad, but that's not important here). A triple is composed of a subject, predicate, and object. Because of this, you can think of these triples as sentences.
