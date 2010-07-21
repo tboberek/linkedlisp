@@ -38,6 +38,7 @@ public class New extends Function {
         }
     }
 
+    // Look at http://commons.apache.org/beanutils/v1.8.3/apidocs/org/apache/commons/beanutils/ConstructorUtils.html
     private Object newJava(Class clazz, State s, ListExpression params) throws Exception {
         
         if(params.get(1) instanceof IDExpression) {

@@ -9,24 +9,20 @@ import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import com.googlecode.linkedlisp.functions.Defun;
+import com.googlecode.linkedlisp.functions.semantic.MakeModel;
 import com.googlecode.linkedlisp.functions.Progn;
 import com.googlecode.linkedlisp.parser.LinkedLispLexer;
 import com.googlecode.linkedlisp.parser.LinkedLispParser;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class Main {
         
     public static void main(String[] args) throws Exception {
         State state = new State();
+        MakeModel modelMaker = new MakeModel();
 
-//        Map<String,String> defaultMappings
-//            = ModelFactory.getDefaultModelPrefixes().getNsPrefixMap();
-//        for (String prefix : defaultMappings.keySet()) {
-//            String p = prefix.split(":")[0]; // We strip off the ':'s.
-//            state.getPrefixes().put(p, defaultMappings.get(prefix));
-//        }
-        
-        //state.setPrefix("xsd", "http://www.w3.org/2001/XMLSchema#");
+        state.setModel((Model)modelMaker.execute(state, new ListExpression()));
         state.setPrefix("java", "java://");
 
         state.getVariables().put("defun", new Defun());
