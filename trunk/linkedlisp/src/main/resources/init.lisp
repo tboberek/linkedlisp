@@ -4,6 +4,7 @@
 
  (defun if  java:com.googlecode.linkedlisp.functions.control.If)
  (defun loop java:com.googlecode.linkedlisp.functions.control.Loop)
+ (defun for java:com.googlecode.linkedlisp.functions.control.For)
 
  (defun lambda  java:com.googlecode.linkedlisp.functions.Lambda)
  (defun let  java:com.googlecode.linkedlisp.functions.Let)
@@ -17,11 +18,12 @@
  (defun cons  java:com.googlecode.linkedlisp.functions.list.Cons)
  (defun cdr  java:com.googlecode.linkedlisp.functions.list.Cdr)
  (defun car  java:com.googlecode.linkedlisp.functions.list.Car)
- (defun append  java:com.googlecode.linkedlisp.functions.list.Cons)
+ (defun append  java:com.googlecode.linkedlisp.functions.list.Append)
  (defun rest  java:com.googlecode.linkedlisp.functions.list.Cdr)
  (defun first  java:com.googlecode.linkedlisp.functions.list.Car)
  (defun last  java:com.googlecode.linkedlisp.functions.list.Last)
  (defun seq  java:com.googlecode.linkedlisp.functions.list.Seq)
+ (defun length  java:com.googlecode.linkedlisp.functions.list.Length)
 
  (defun concatenate  java:com.googlecode.linkedlisp.functions.text.Concatenate)
  (defun split  java:com.googlecode.linkedlisp.functions.text.Split)
@@ -30,6 +32,7 @@
 
  (defun find  java:com.googlecode.linkedlisp.functions.semantic.Find)
  (defun load  java:com.googlecode.linkedlisp.functions.semantic.Load)
+ (defun save  java:com.googlecode.linkedlisp.functions.semantic.Save)
  (defun prefix  java:com.googlecode.linkedlisp.functions.semantic.Prefix)
  (defun builtin  java:com.googlecode.linkedlisp.functions.semantic.Builtin)
  (defun rule  java:com.googlecode.linkedlisp.functions.semantic.Rule)
