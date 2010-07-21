@@ -91,6 +91,17 @@
   (get (concatenate endpoint (urlEncode query)))
 )
 
+
+;; Expects a bean with getFirstName(), getLastName().
+(defun getName (personBean)
+  (concatenate (get personBean "firstName") " " (get personBean "lastName"))
+)
+
+;; Expects a bean with setName(String).
+(defun setName (bean value)
+  (set bean "name" value)
+)
+
 ;; A convenience function to URL-encode text, which uses a static
 ;; method.
 (defun urlEncode (s)
