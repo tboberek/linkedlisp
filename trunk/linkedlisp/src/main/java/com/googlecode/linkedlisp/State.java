@@ -1,25 +1,16 @@
 package com.googlecode.linkedlisp;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Arrays;
 
-import com.hp.hpl.jena.iri.impl.Parser;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.InfModel;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.reasoner.Reasoner;
 import com.hp.hpl.jena.reasoner.rulesys.GenericRuleReasoner;
 import com.hp.hpl.jena.reasoner.rulesys.OWLMicroReasoner;
-import com.hp.hpl.jena.reasoner.rulesys.GenericRuleReasonerFactory;
 import com.hp.hpl.jena.reasoner.rulesys.Rule;
-import com.hp.hpl.jena.vocabulary.*;
 
 public class State {
 
@@ -34,7 +25,7 @@ public class State {
     private Model baseModel = null;
     private State rootState = this;
     private State parentState = null;
-    private Map<String, Object> variables = new HashMap<String,Object>();
+    private final Map<String, Object> variables = new HashMap<String,Object>();
     private InfModel model;
 
     public State(Model m) {
@@ -92,7 +83,7 @@ public class State {
         if (parsed.length > 1 ) {
             if (getPrefixes().containsKey(parsed[0]))
                 return getPrefixes().get(parsed[0])+parsed[1];
-            else if (parentState != null 
+            else if (parentState != null
                 && rootState.getPrefixes().containsKey(parsed[0]))
                 return rootState.getPrefixes().get(parsed[0])+parsed[1];
         }
@@ -105,7 +96,7 @@ public class State {
             value = getVariables().get(name);
             if (value instanceof IDExpression && parentState != null) {
                 String nameInParent = ((Expression)value).getValue().toString();
-                value = parentState.getVariable(nameInParent);            
+                value = parentState.getVariable(nameInParent);
             } else if (value instanceof Expression) {
                 State forEval = this;
                 if (this.parentState != null) forEval = this.parentState;
@@ -114,7 +105,7 @@ public class State {
             }
         } else if (parentState != null){
             value = rootState.getVariable(name);
-        } 
+        }
 
         return value;
     }
