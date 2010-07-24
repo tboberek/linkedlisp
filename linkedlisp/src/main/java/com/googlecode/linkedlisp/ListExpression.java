@@ -32,10 +32,24 @@ public class ListExpression implements Expression, Iterable<Expression> {
         Expression first = getFirst();
         Function f = (Function)first.evaluate(s);
         
+        String name;
+        if(first instanceof IDExpression) {
+        	name = (String) first.getValue();
+        } else
+        	name = "UNKNOWN";
+        
         if(f == null)
         	throw new RuntimeException("function not found: " + first);
         
-        return f.execute(s, getRest());
+        try {
+        	return f.execute(s, getRest());
+        } catch (LispRuntimeException e) {
+        	// add linkedlisp names as we're unwinding the java stack
+        	e.addToStacktrace(name);
+        	throw e;
+        } catch (Exception e) {
+        	throw new LispRuntimeException(e, name);
+        }
     }
 
     @Override
