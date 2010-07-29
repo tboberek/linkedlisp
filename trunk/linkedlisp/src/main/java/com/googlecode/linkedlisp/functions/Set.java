@@ -1,44 +1,44 @@
 package com.googlecode.linkedlisp.functions;
 
-import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.State;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-
 import java.util.List;
 import java.util.Map;
 
+import com.googlecode.linkedlisp.Environment;
+import com.googlecode.linkedlisp.Function;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
 
+
+@SuppressWarnings("unchecked")
 public class Set extends Function {
 
     @Override
-	public Object execute(State s, ListExpression params) throws Exception {
+	public Object execute(Environment s, List params) throws Exception {
         if (params.size() > 2) {
-            Object value = params.getFirst().evaluate(s);
+            Object value = s.resolve(params.get(0));
             if (value instanceof Resource) {
                 return setSemantic((Resource)value, s, params);
             } else if (value instanceof List) {
-                int index = ((Number)params.get(1).evaluate(s)).intValue();
-                Object val = params.get(2).evaluate(s);
-                return ((List)value).set(index, value);
+                int index = s.resolveAsInteger(s.evaluate(params.get(1))).intValue();
+                Object val = s.evaluate(params.get(2));
+                return ((List)value).set(index, val);
             } else if (value instanceof Map) {
-                Object key = params.get(1).evaluate(s);
-                Object val = params.get(2).evaluate(s);
-                return ((Map)value).put(key, value);
+                Object key = s.evaluate(params.get(1));
+                Object val = s.evaluate(params.get(2));
+                return ((Map)value).put(key, val);
             } else {
                 return setJava(value, s, params);
             }
         } else if (params.size() == 2) {
-            return s.getVariables().put((String)params.get(0).getValue(),
-                                        params.get(1).evaluate(s));
+            return s.getVariables().put(params.get(0).toString(),
+                                        s.evaluate(params.get(1)));
         } else return null;
     }
 
-    private Object setSemantic(Resource subject, State s, ListExpression params) throws Exception {
-        Property p = ((Resource)params.get(1).evaluate(s)).as(Property.class);
+    private Object setSemantic(Resource subject, Environment s, List params) throws Exception {
+        Property p = s.resolveAsResource(s.evaluate(params.get(1))).as(Property.class);
         if (params.size() == 3) {
-            Object o = params.get(2).evaluate(s);
+            Object o = s.evaluate(params.get(2));
             if (o instanceof Resource)
                 subject.addProperty(p, (Resource)o);
             else subject.addLiteral(p, o);
@@ -46,7 +46,7 @@ public class Set extends Function {
         return subject;
     }
 
-    private Object setJava(Object value, State s, ListExpression params) {
+    private Object setJava(Object value, Environment s, List params) {
         // TODO Auto-generated method stub
         return null;
     }

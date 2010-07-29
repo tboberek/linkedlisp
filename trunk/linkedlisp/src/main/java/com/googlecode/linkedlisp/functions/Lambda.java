@@ -2,31 +2,32 @@ package com.googlecode.linkedlisp.functions;
 
 import java.util.List;
 
-import com.googlecode.linkedlisp.Expression;
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.ResourceExpression;
-import com.googlecode.linkedlisp.State;
+import com.googlecode.linkedlisp.Environment;
+import com.hp.hpl.jena.rdf.model.Resource;
 
+@SuppressWarnings({ "unchecked", "unused" })
 public class Lambda extends Function {
 
     @Override
-	public Object execute(State s, ListExpression params) throws Exception {
+	public Object execute(Environment s, List params) throws Exception {
         
-        Expression x = params.get(0);
-        if (x instanceof ResourceExpression) {
-            Object res = x.evaluate(s);
-            if (res instanceof Class) {
-                Class functionClass = (Class)res;
-                Function function = (Function) functionClass.newInstance();
-                return function;
-            }
-        } else if (x instanceof ListExpression){
+        Object x = s.resolve(params.get(0));
+        if (x instanceof List){
             LispFunction fn = new LispFunction();
-            fn.setParameterNames((List<String>)x.getValue());
-            fn.setBody(params.get(1));
+            fn.setParameterNames((List)x);
+            fn.setBody(s.resolveAsList(params.get(1)));
+            fn.setEnvironment(s);
             return fn;
         } else {
+            Resource res = s.resolveAsResource(params.get(0));
+            if (res.getURI().startsWith("java://")) {
+                Class cl = Class.forName(res.getURI().substring(7));
+                Function function = (Function) cl.newInstance();
+                function.setEnvironment(s);
+                return function;
+            }
             System.err.println("I don't know what to do with this:\t"+x);
         }
         return null;

@@ -1,17 +1,18 @@
 package com.googlecode.linkedlisp.functions;
 
 import java.lang.reflect.Constructor;
+import java.util.List;
 
+import com.googlecode.linkedlisp.Environment;
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.State;
 import com.hp.hpl.jena.rdf.model.Resource;
 
+@SuppressWarnings("unchecked")
 public class New extends Function {
 
     @Override
-	public Object execute(State s, ListExpression params) throws Exception {
-        Object value = params.getFirst().evaluate(s);
+	public Object execute(Environment s, List params) throws Exception {
+        Object value = s.evaluate(params.get(0));
         if (value instanceof Class){
             return newJava((Class)value, s, params);
         } else {
@@ -19,23 +20,22 @@ public class New extends Function {
         }
     }
 
-    private Object newSemantic(String ontClass, State s, ListExpression params) throws Exception {
+    private Object newSemantic(String ontClass, Environment s, List params) throws Exception {
         Resource c = s.getModel().createResource(ontClass);
         if (params.size() == 1) {
             return s.getModel().createResource(c);
         } else {
-            String uri = params.get(1).evaluate(s).toString();
-            return s.getModel().createResource(uri, c);
+            return s.resolveAsResource(params.get(1));
         }
     }
 
     // Look at http://commons.apache.org/beanutils/v1.8.3/apidocs/org/apache/commons/beanutils/ConstructorUtils.html
-    private Object newJava(Class clazz, State s, ListExpression params) throws Exception {
+    private Object newJava(Class clazz, Environment s, List params) throws Exception {
 
     	Object[] objs = new Object[params.size() - 1];
     	Class[] classes = new Class[params.size() - 1];
     	for(int x = 1; x < params.size(); x++) {
-    		objs[x - 1] = params.get(x).evaluate(s);
+    		objs[x - 1] = s.resolve(params.get(x));
     		classes[x - 1] = objs[x - 1].getClass();
     	}
     	

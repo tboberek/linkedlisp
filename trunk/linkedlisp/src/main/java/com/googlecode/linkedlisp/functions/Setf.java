@@ -1,19 +1,19 @@
 package com.googlecode.linkedlisp.functions;
 
-import java.util.Arrays;
+import java.util.List;
 
+import com.googlecode.linkedlisp.Environment;
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.State;
 
 public class Setf extends Function {
     public Setf() {
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-	public Object execute(State s, ListExpression params) throws Exception {
-		String name = (String) params.get(0).getValue ();	
-		return s.setVariable (name, params.get(1).evaluate(s));
+	public Object execute(Environment s, List params) throws Exception {
+		String name = params.get(0).toString();	
+		return s.setVariable (name, s.evaluate(params.get(1)));
     }
 
     @Override

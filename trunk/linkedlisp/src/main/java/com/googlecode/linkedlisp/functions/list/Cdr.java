@@ -7,14 +7,14 @@ import java.util.List;
 
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.State;
+import com.googlecode.linkedlisp.Environment;
 import com.hp.hpl.jena.rdf.model.RDFList;
 
 public class Cdr extends Function {
 
     @Override
-	public Object execute(State s, ListExpression params) throws Exception {
-        Object value = params.getFirst().evaluate(s);
+	public Object execute(Environment s, List params) throws Exception {
+        Object value = s.evaluate(params.get(0));
         if (value == null) return null;
         else if (value instanceof Collection<?>) {
             if (((Collection)value).size() > 1) {

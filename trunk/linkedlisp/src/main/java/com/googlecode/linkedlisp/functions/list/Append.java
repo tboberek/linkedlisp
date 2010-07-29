@@ -6,13 +6,13 @@ import java.util.List;
 
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.State;
+import com.googlecode.linkedlisp.Environment;
 
 public class Append extends Function {
     @Override
-	public Object execute(State s, ListExpression params) throws Exception {
-        Collection<Object> result = (Collection<Object>) params.get(0).evaluate(s);
-        result.add(params.get(1).evaluate(s));
+	public Object execute(Environment s, List params) throws Exception {
+        Collection<Object> result = (Collection<Object>) s.evaluate(params.get(0));
+        result.add(s.evaluate(params.get(1)));
         return result;
     }
 

@@ -1,25 +1,26 @@
 package com.googlecode.linkedlisp.functions.control;
 
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.Expression;
-import com.googlecode.linkedlisp.State;
+
+import java.util.LinkedList;
+import java.util.List;
+import com.googlecode.linkedlisp.Environment;
 import com.googlecode.linkedlisp.functions.Let;
 
 public class For extends Function {
 
     @Override
-	public Object execute(State s, ListExpression params) throws Exception {
+	public Object execute(Environment s, List params) throws Exception {
         
-        String variable = params.get(0).getValue().toString();
+        String variable = params.get(0).toString();
         // Skip param 1, as this is the "in"
-        Iterable it = (Iterable) params.get(2).evaluate(s);
-        Expression exec = params.get(3);
-        State sPrime = s.copyForLet(new ListExpression());
+        Iterable it = (Iterable) s.evaluate(params.get(2));
+        Object exec = params.get(3);
+        Environment sPrime = s.copyForScope(new LinkedList(), s);
         Object lastResult = null;
         for (Object val : it) {
             sPrime.setVariable(variable, val);
-            lastResult = exec.evaluate(sPrime);
+            lastResult = sPrime.evaluate(exec);
         }
 		return lastResult;
     }

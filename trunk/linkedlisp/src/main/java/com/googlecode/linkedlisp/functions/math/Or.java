@@ -2,19 +2,19 @@ package com.googlecode.linkedlisp.functions.math;
 
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.Expression;
-import com.googlecode.linkedlisp.State;
+import com.googlecode.linkedlisp.Environment;
+import java.util.List;
 
 public class Or extends Function {
 	public Or() {
 	}
 
 	@Override
-	public Object execute(State s, ListExpression params) throws Exception {
+	public Object execute(Environment s, List params) throws Exception {
 		Object result = null;
 
-        for (Expression exp : params)  {
-			result = exp.evaluate(s);
+        for (Object exp : params)  {
+			result = s.evaluate(exp);
 
 			if (null != result) {
 				break;

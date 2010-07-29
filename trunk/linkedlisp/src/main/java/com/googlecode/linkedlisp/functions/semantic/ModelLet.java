@@ -1,27 +1,22 @@
 package com.googlecode.linkedlisp.functions.semantic;
 
-import java.util.Arrays;
 import java.util.List;
 
-import com.googlecode.linkedlisp.Expression;
+import com.googlecode.linkedlisp.Environment;
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.NoReturnException;
-import com.googlecode.linkedlisp.ResourceExpression;
-import com.googlecode.linkedlisp.State;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
 
 public class ModelLet extends Function {
 
-    public Object execute(State s, ListExpression params) throws Exception {
+    public Object execute(Environment s, List params) throws Exception {
         
-        Model model = (Model)params.get(0).evaluate(s);
+        Model model = (Model)s.evaluate(params.get(0));
 
-        State sPrime = s.copyForLet(new ListExpression());
+        Environment sPrime = s.copyForScope(new ListExpression(), s);
         sPrime.setModel(model);
-        Expression execution = params.get(1);
-        return execution.evaluate(sPrime);
+        Object execution = params.get(1);
+        return sPrime.evaluate(execution);
     }
 
     @Override

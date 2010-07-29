@@ -1,18 +1,19 @@
 package com.googlecode.linkedlisp.functions;
 
-import com.googlecode.linkedlisp.Expression;
-import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.State;
+import java.util.List;
 
+import com.googlecode.linkedlisp.Environment;
+import com.googlecode.linkedlisp.Function;
+
+@SuppressWarnings("unchecked")
 public class LispFunction extends Function {
 
-    private Expression body;
+    private List body;
 
     @Override
-    public Object execute(State s, ListExpression params) throws Exception {
-        State newState = s.copyForCall(params, getParameterNames());
-        return body.evaluate(newState);
+    public Object execute(Environment s, List params) throws Exception {
+        Environment newState = s.copyForCall(params, getParameterNames(), getEnvironment());
+        return newState.evaluate(body);
     }
 
     @Override
@@ -20,7 +21,7 @@ public class LispFunction extends Function {
         return body;
     }
 
-    public void setBody(Expression expression) {
+    public void setBody(List expression) {
         body = expression;
     }
 

@@ -1,18 +1,25 @@
 package com.googlecode.linkedlisp.functions;
 
+import java.util.List;
+
+import com.googlecode.linkedlisp.Environment;
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.State;
 
 public class Defun extends Function {
 
     private final Lambda lambda = new Lambda();
     
+    public void setEnvironment(Environment environment) {
+        super.setEnvironment(environment);
+        lambda.setEnvironment(environment);
+    }
+    
+    @SuppressWarnings("unchecked")
     @Override
-    public Object execute(State s, ListExpression params) throws Exception {
-        String name = params.get(0).getValue().toString();
-        Object function = lambda.execute(s, params.getRest());
-        s.getGlobalVariables().put(name, function);
+    public Object execute(Environment s, List params) throws Exception {
+        String name = params.get(0).toString();
+        Object function = lambda.execute(s, s.getRest(params));
+        s.setVariable(name, function);
         return null;
     }
 

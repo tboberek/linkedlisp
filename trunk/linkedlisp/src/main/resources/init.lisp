@@ -6,6 +6,7 @@
  (defun loop java:com.googlecode.linkedlisp.functions.control.Loop)
  (defun for java:com.googlecode.linkedlisp.functions.control.For)
 
+ (defun eval  java:com.googlecode.linkedlisp.functions.Evaluate)
  (defun lambda  java:com.googlecode.linkedlisp.functions.Lambda)
  (defun let  java:com.googlecode.linkedlisp.functions.Let)
  (defun setf java:com.googlecode.linkedlisp.functions.Setf)

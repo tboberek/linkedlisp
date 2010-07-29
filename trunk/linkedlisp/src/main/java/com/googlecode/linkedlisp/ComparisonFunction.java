@@ -1,24 +1,20 @@
 package com.googlecode.linkedlisp;
 
-import java.util.Arrays;
-
-import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.Expression;
-import com.googlecode.linkedlisp.State;
+import java.util.List;
 
 public abstract class ComparisonFunction extends Function {
 	public abstract boolean operation (Object first, Object next);
 
-	public Float evaluateToFloat (State s, Expression exp) throws Exception {
-		String stringFactor = (String) exp.evaluate(s).toString();
+	public Float evaluateToFloat (Environment s, Object exp) throws Exception {
+		String stringFactor = (String) s.evaluate(exp).toString();
 		Float factor = Float.valueOf(stringFactor.trim()).floatValue();
 
 		return factor;
 	}			
 
-	@Override
-	public Object execute(State s, ListExpression params) throws Exception {
+	@SuppressWarnings("unchecked")
+    @Override
+	public Object execute(Environment s, List params) throws Exception {
 		int size = params.size ();
 
 		// If there's only one parameter,
@@ -31,12 +27,12 @@ public abstract class ComparisonFunction extends Function {
 	    // the next, until we're done
 		for (int i = 0; i < size - 1; i++)
 		{
-			Expression first = params.get(i);
-			Expression next = params.get(i + 1);
+			Object first = params.get(i);
+			Object next = params.get(i + 1);
 
 			// Compare the two parameters we have
 			// against each other
-			if (!operation(first.evaluate(s), next.evaluate(s))) {
+			if (!operation(s.evaluate(first), s.evaluate(next))) {
 				// Once we've failed, we're done.
 				return null;
 			}
