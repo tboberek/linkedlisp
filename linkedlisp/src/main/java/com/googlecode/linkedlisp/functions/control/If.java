@@ -2,17 +2,18 @@ package com.googlecode.linkedlisp.functions.control;
 
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.State;
+import com.googlecode.linkedlisp.Environment;
+import java.util.List;
 
 public class If extends Function {
 
     @Override
-	public Object execute(State s, ListExpression params) throws Exception {
-        Object value = params.getFirst().evaluate(s);
+	public Object execute(Environment s, List params) throws Exception {
+        Object value = s.evaluate(params.get(0));
         if (value != null) {
-            return params.get(1).evaluate(s);
+            return s.evaluate(params.get(1));
         } else if (params.size() > 2) {
-            return params.get(2).evaluate(s);
+            return s.evaluate(params.get(2));
         } else return null;
     }
 

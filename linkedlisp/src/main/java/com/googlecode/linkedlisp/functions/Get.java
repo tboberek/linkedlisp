@@ -5,38 +5,37 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.googlecode.linkedlisp.Environment;
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.State;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 
+@SuppressWarnings("unchecked")
 public class Get extends Function {
 
     @Override
-	public Object execute(State s, ListExpression params) throws Exception {
-        Object value = params.getFirst().evaluate(s);
+	public Object execute(Environment s, List params) throws Exception {
+        Object value = s.resolve(params.get(0));
         if (value instanceof Resource) {
             return getSemantic((Resource)value, s, params);
         } else if (value instanceof List) {
-            int index = ((Number)params.get(1).evaluate(s)).intValue();
+            int index = s.resolveAsInteger(params.get(1)).intValue();
             return ((List)value).get(index);
         } else if (value instanceof Map) {
-            Object key = params.get(1).evaluate(s);
+            Object key = s.resolve(params.get(1));
             return ((Map)value).get(key);
         } else {
             return getJava(value, s, params);
         }
     }
 
-    private Object getSemantic(Resource subject, State s, ListExpression params) throws Exception {
+    private Object getSemantic(Resource subject, Environment s, List params) throws Exception {
         
-        Resource predicate = null;
         if (params.size() > 1) {
-            predicate = (Resource)params.get(1).evaluate(s);
+            Resource predicate = s.resolveAsResource(params.get(1));
             List<Statement> foo = subject.listProperties(predicate.as(Property.class)).toList();
             List<Object> result = new ArrayList<Object>(foo.size());
             for (Statement stmt : foo) {
@@ -65,7 +64,7 @@ public class Get extends Function {
         }
     }
 
-    private Object getJava(Object value, State s, ListExpression params) {
+    private Object getJava(Object value, Environment s, List params) {
         // TODO Auto-generated method stub
         return null;
     }

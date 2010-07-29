@@ -1,72 +1,75 @@
 package com.googlecode.linkedlisp.functions.semantic;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.googlecode.linkedlisp.Expression;
+import com.googlecode.linkedlisp.Environment;
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.IDExpression;
 import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.NoReturnException;
-import com.googlecode.linkedlisp.ResourceExpression;
-import com.googlecode.linkedlisp.State;
+import com.googlecode.linkedlisp.Symbol;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.reasoner.rulesys.BuiltinRegistry;
 
 public class Bind extends Function {
 
     private Builtin builtin = new Builtin();
     private Rule rule = new Rule();
     
-    public Object execute(State s, ListExpression params) throws Exception {
-        Resource property = (Resource)params.get(0).evaluate(s);
+    public void setEnvironment(Environment environment) {
+        super.setEnvironment(environment);
+        builtin.setEnvironment(environment);
+        rule.setEnvironment(environment);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public Object execute(Environment s, List params) throws Exception {
+        Resource property = s.resolveAsResource(s.evaluate(params.get(0)));
         String name = "binding"+UUID.randomUUID().toString();
         
         ListExpression builtinExpression = new ListExpression();
-        builtinExpression.append(new IDExpression(name));
+        builtinExpression.append(new Symbol(name));
         builtinExpression.append(params.get(2));
         FunctionBuiltin fb = (FunctionBuiltin)builtin.execute(s, builtinExpression);
         Function f = fb.getFunction();
         
-        List<String> functionParameters = f.getParameterNames();
+        List functionParameters = f.getParameterNames();
         
         ListExpression ruleExpression = new ListExpression();
-        ruleExpression.append(new IDExpression(name+"Rule"));
+        ruleExpression.append(new Symbol(name+"Rule"));
         
         ListExpression head = new ListExpression();
         ListExpression body = new ListExpression();
 
-        String valueVar = "o";
+        Symbol valueVar = new Symbol("o");
         
         ListExpression headClause = new ListExpression();
-        headClause.append(new IDExpression(functionParameters.get(0)));
-        headClause.append(new ResourceExpression(property));
-        headClause.append(new IDExpression(valueVar));
+        headClause.append(functionParameters.get(0));
+        headClause.append(property);
+        headClause.append(valueVar);
         
         head.append(headClause);
         
-        ListExpression builtinCallParams = new ListExpression();
-        builtinCallParams.append(new IDExpression(valueVar));
-        for (String paramName : functionParameters) {
-            builtinCallParams.append(new IDExpression(paramName));
+        List builtinCallParams = new ArrayList();
+        builtinCallParams.add(builtinCallParams.size(), valueVar);
+        for (Object paramName : functionParameters) {
+            builtinCallParams.add(builtinCallParams.size(), paramName);
         }
 
-        ListExpression builtinCall = new ListExpression();
-        builtinCall.append(new IDExpression(name));
-        builtinCall.append(builtinCallParams);
+        List builtinCall = new ArrayList();
+        builtinCall.add(builtinCall.size(), new Symbol(name));
+        builtinCall.add(builtinCall.size(), builtinCallParams);
         
-        ListExpression bindingCondition = (ListExpression)params.get(1);
-        for (Expression e : bindingCondition) {
+        List bindingCondition = (List)params.get(1);
+        for (Object e : bindingCondition) {
             body.append(e);
         }
         body.append(builtinCall);
         
-        ListExpression r = new ListExpression();
-        r.append(new IDExpression("rule_"+name));
-        r.append(head);
-        r.append(new IDExpression("<-"));
-        r.append(body);
+        List r = new ArrayList();
+        r.add(r.size(), new Symbol("rule_"+name));
+        r.add(r.size(), head);
+        r.add(r.size(), new Symbol("<-"));
+        r.add(r.size(), body);
         
         return rule.execute(s, r);
     }

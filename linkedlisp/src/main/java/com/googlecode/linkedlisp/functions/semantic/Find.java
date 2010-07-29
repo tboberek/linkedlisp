@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.State;
+import com.googlecode.linkedlisp.Environment;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -16,27 +16,24 @@ import com.hp.hpl.jena.rdf.model.Statement;
 public class Find extends Function {
 
     @Override
-    public Object execute(State state, ListExpression params) throws Exception {
+    public Object execute(Environment state, List params) throws Exception {
         Resource s = null;
         if (params.size() > 0 && params.get(0) != null)
-            s = toResource(params.get(0).evaluate(state));
+            s = state.resolveAsResource(toResource(state.evaluate(params.get(0))));
         Property p = null;
         if (params.size() > 1 && params.get(1) != null)
-            p = toProperty(params.get(1).evaluate(state));
+            p = state.resolveAsResource(toResource(state.evaluate(params.get(1)))).as(Property.class);
         RDFNode o = null;
         if (params.size() > 2 && params.get(2) != null)
-            o = toNode(params.get(2).evaluate(state), state);
-        //System.out.println("Searching for "+s+"\t"+p+"\t"+o);
+            o = toNode(toResource(state.evaluate(params.get(2))), state);
         List result = new ArrayList();
         List<Statement> stmtList = state.getModel().listStatements(s,p,o).toList();
-        //System.out.println("Found "+stmtList.size()+" statements.");
         for (Statement stmt : stmtList) {
             List<Object> statement = Arrays.asList(new Object[]{
                     stmt.getSubject(),stmt.getPredicate(),
                     stmt.getObject().isLiteral() ?
                             stmt.getLiteral().getValue() :
                                 stmt.getResource()});
-//            System.out.println(statement);
             result.add(statement);
         }
         return result;
@@ -52,7 +49,7 @@ public class Find extends Function {
         return ((RDFNode)o).as(Property.class);
     }
 
-    private RDFNode toNode(Object o, State s) throws Exception {
+    private RDFNode toNode(Object o, Environment s) throws Exception {
         if (o == null) return null;
         else if (o instanceof RDFNode) {
             return (RDFNode)o;

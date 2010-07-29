@@ -4,23 +4,31 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class Function {
-    private List<String> parameterNames = Collections.emptyList();
+    
+    private Environment environment;
+    
+    private List parameterNames = Collections.emptyList();
 
-    public List<String> getParameterNames() {
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
+    
+    public Environment getEnvironment() {
+        return environment;
+    }
+    
+    public List getParameterNames() {
         return parameterNames;
     }
     
-    public void setParameterNames(List<String> names) {
+    public void setParameterNames(List names) {
         this.parameterNames = names;
     }
     
-    public abstract Object execute(State s, ListExpression params) throws Exception;
+    @SuppressWarnings("unchecked")
+    public abstract Object execute(Environment s, List params) throws Exception;
 
 
-    public Object getVariable(State s, int position) throws Exception {
-        return s.getVariable(getParameterNames().get(position));
-    }
-    
     @Override
 	public String toString() {
         return getValue().toString();

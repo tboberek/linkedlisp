@@ -2,8 +2,7 @@ package com.googlecode.linkedlisp.functions.semantic;
 
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.Expression;
-import com.googlecode.linkedlisp.State;
+import com.googlecode.linkedlisp.Environment;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -13,12 +12,13 @@ import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 import com.hp.hpl.jena.vocabulary.XSD;
+import java.util.List;
 
 public class MakeTDBModel extends Function {
     
 	@Override
-	public Object execute(State s, ListExpression params) throws Exception {
-	    String source = params.get(0).evaluate(s).toString();
+	public Object execute(Environment s, List params) throws Exception {
+	    String source = s.evaluate(params.get(0)).toString();
         Model result = TDBFactory.createModel(source);
         result.setNsPrefix("rdf", RDF.getURI());
         result.setNsPrefix("rdfs", RDFS.getURI());

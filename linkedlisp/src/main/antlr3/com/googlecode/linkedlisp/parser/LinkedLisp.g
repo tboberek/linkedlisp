@@ -8,6 +8,8 @@ import java.util.HashMap;
 import com.googlecode.linkedlisp.*;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.datatypes.RDFDatatype;
+import com.hp.hpl.jena.datatypes.TypeMapper;
 }
 @lexer::header {
 package com.googlecode.linkedlisp.parser;
@@ -40,11 +42,11 @@ import java.io.*;
     }
 }
 
-eval returns [Expression expr]
+eval returns [Object expr]
 	:    e=exp {expr=e;} EOF
 	;
 
-exp returns [Expression exp]
+exp returns [Object exp]
     :    lst=listExp {exp = lst;}
     |    qe=quoteExp {exp = qe;}
 	|	 v=var {exp = v;}
@@ -52,32 +54,48 @@ exp returns [Expression exp]
 	; 
 
 quoteExp returns [ListExpression list]
-    :   '\'' e=exp {list = new ListExpression(); list.append(new IDExpression("QUOTE")); list.append(e);}
+    :   '\'' e=exp {list = new ListExpression(); list.append(new Symbol("QUOTE")); list.append(e);}
     ;
     
 listExp returns [ListExpression list]
     :   {$list = new ListExpression();}
         '(' (e=exp {list.append(e);})* ')' 
     ;
-var	returns [Expression exp]
+var	returns [Object exp]
     :	i=id {exp = i;}
 	|	u=uri {exp = u;}
 	;
 
-id	returns [IDExpression idexp]
-    :	ID {idexp = new IDExpression($ID.text);}
+id	returns [Symbol idexp]
+    :	ID {idexp = new Symbol($ID.text);}
 	;
 	
-uri	returns [ResourceExpression expr]
-    :	'<' URI '>' {expr = new ResourceExpression(model.createResource($URI.text));}
-	|	URI {expr = new ResourceExpression($URI.text);}
+uri	returns [java.net.URI expr]
+    :	'<' URI '>' {try {
+        	expr = new java.net.URI($URI.text);
+        } catch (java.net.URISyntaxException e) {
+        	System.err.println(e.getMessage());
+        	System.exit(1);
+        }
+    }
+	|	URI {try {
+            expr = new java.net.URI($URI.text);
+        } catch (java.net.URISyntaxException e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
+        }
+    }
 	;
 
-literal returns [Literal lit]
-    :	s=str {lit = new Literal(s);} 
-	| 	s=str '^^' u=uri {lit = new TypedLiteral(s, u);}
-	| 	INT {lit = new IntLiteral(Long.parseLong($INT.text));}
-	| 	FLOAT {lit = new FloatLiteral(Long.parseLong($FLOAT.text));}
+literal returns [Object lit]
+    :	s=str {lit = s;} 
+	| 	s=str '^^' u=uri {
+            TypeMapper mapper = TypeMapper.getInstance();
+            RDFDatatype datatype = mapper.getTypeByName(model.expandPrefix(u.toString()));
+            lit = model.createTypedLiteral(s,datatype).getValue();
+		}
+	| 	INT {lit = Long.parseLong($INT.text);}
+	| 	FLOAT {lit = Double.parseDouble($FLOAT.text);}
 	|   NIL {lit = null;}
 	;
 

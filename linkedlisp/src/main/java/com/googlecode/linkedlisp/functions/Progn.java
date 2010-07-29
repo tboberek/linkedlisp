@@ -1,19 +1,19 @@
 package com.googlecode.linkedlisp.functions;
 
-import com.googlecode.linkedlisp.Expression;
+import java.util.List;
+
+import com.googlecode.linkedlisp.Environment;
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.State;
 
 public class Progn extends Function {
 
+    @SuppressWarnings("unchecked")
     @Override
-	public Object execute(State s, ListExpression params) throws Exception {
+	public Object execute(Environment s, List params) throws Exception {
         Object result = null;
         params.iterator();
-        for (Expression exp : params)  {
-            Object o = exp.evaluate(s);
-            result = o;
+        for (Object exp : params)  {
+            result = s.evaluate(exp);
         }
         return result;
     }

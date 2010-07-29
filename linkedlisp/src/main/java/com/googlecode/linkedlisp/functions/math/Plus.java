@@ -11,7 +11,7 @@ public class Plus extends ArithmeticFunction {
 		return "+";
 	}
 
-	public Float operation (Float current, Float factor) {
+	public Double operation (Double current, Double factor) {
 		current += factor;
 		return current;
 	}

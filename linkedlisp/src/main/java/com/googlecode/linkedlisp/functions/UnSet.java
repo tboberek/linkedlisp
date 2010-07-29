@@ -1,18 +1,20 @@
 package com.googlecode.linkedlisp.functions;
 
+import java.util.List;
+
+import com.googlecode.linkedlisp.Environment;
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.State;
 import com.hp.hpl.jena.rdf.model.InfModel;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
+@SuppressWarnings("unchecked")
 public class UnSet extends Function {
 
     @Override
-	public Object execute(State s, ListExpression params) throws Exception {
-        Object value = params.getFirst().evaluate(s);
+	public Object execute(Environment s, List params) throws Exception {
+        Object value = s.evaluate(params.get(0));
         if (value instanceof Resource) {
             return unsetSemantic((Resource)value, s, params);
         } else {
@@ -20,12 +22,12 @@ public class UnSet extends Function {
         }
     }
 
-    private Object unsetSemantic(Resource subject, State s, ListExpression params) throws Exception {
+    private Object unsetSemantic(Resource subject, Environment s, List params) throws Exception {
         InfModel model = s.getModel();
-        Property p = ((Resource)params.get(1).evaluate(s)).as(Property.class);
+        Property p = s.resolveAsResource(s.evaluate(params.get(1))).as(Property.class);
         if (params.size() >= 3) {
             for (int i=2; i < params.size(); ++i) {
-                Object o = params.get(i).evaluate(s);
+                Object o = s.evaluate(params.get(i));
                 RDFNode obj = null;
                 if (o instanceof RDFNode) {
                     obj = (RDFNode)o;
@@ -43,7 +45,7 @@ public class UnSet extends Function {
         return subject;
     }
 
-    private Object unsetJava(Object value, State s, ListExpression params) {
+    private Object unsetJava(Object value, Environment s, List params) {
         // TODO Auto-generated method stub
         return null;
     }

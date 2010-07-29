@@ -5,95 +5,40 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ListExpression implements Expression, Iterable<Expression> {
+import com.googlecode.linkedlisp.functions.Evaluate;
 
-    private List<Expression> values = new LinkedList<Expression>();
-    
+public class ListExpression extends ArrayList<Object> {
+
     public ListExpression() {
+        super();
     }
     
-    public ListExpression(List<Expression> values) {
-        this.values = values;
+    public ListExpression(List values) {
+        super(values);
     }
     
-    public ListExpression(Expression first, ListExpression rest) {
-        values.add(first);
+    public ListExpression(Object first, List rest) {
+        add(first);
         if (rest != null)
-            values.addAll(rest.getValues());
+            addAll(rest);
     }
     
-    private List<Expression> getValues() {
-        return values;
-    }
-
-    @Override
-    public Object evaluate(State s) throws Exception {
-        if (values.size() == 0) return null;
-        Expression first = getFirst();
-        Function f = (Function)first.evaluate(s);
-        
-        String name;
-        if(first instanceof IDExpression) {
-        	name = (String) first.getValue();
-        } else
-        	name = "UNKNOWN";
-        
-        if(f == null)
-        	throw new RuntimeException("function not found: " + first);
-        
-        try {
-        	return f.execute(s, getRest());
-        } catch (LispRuntimeException e) {
-        	// add linkedlisp names as we're unwinding the java stack
-        	e.addToStacktrace(name);
-        	throw e;
-        } catch (Exception e) {
-        	throw new LispRuntimeException(e, name);
-        }
-    }
-
-    @Override
-    public Object getValue() {
-        List<Object> result = new ArrayList<Object>();
-        for (Expression value : values) {
-            result.add(value.getValue());
-        }
-        return result;
-    }
-
-    public void append(Expression exp) {
-        values.add(values.size(),exp);
+    public void append(Object exp) {
+        add(size(),exp);
     }
     
-    public Expression getFirst() {
-        if (values.size() > 0)
-            return values.get(0);
+    public Object getFirst() {
+        if (size() > 0)
+            return get(0);
         else return null;
     }
     
     public ListExpression getRest() {
-        if (values.size() > 1) {
-            List<Expression> result = new ArrayList<Expression>(values);
+        if (size() > 1) {
+            ListExpression result = new ListExpression(this);
             result.remove(0);
-            return new ListExpression(result);
+            return result;
         } else return null;
     }
     
-    public Expression get(int index) {
-        return values.get(index);
-    }
-    
-    public int size() {
-        return values.size();
-    }
-
-    @Override
-    public Iterator<Expression> iterator() {
-        return values.iterator();
-    }
-    
-    @Override
-	public String toString() {
-        return getValue().toString();
-    }
 }

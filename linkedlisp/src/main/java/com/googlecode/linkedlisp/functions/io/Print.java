@@ -1,10 +1,11 @@
 package com.googlecode.linkedlisp.functions.io;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.State;
+import com.googlecode.linkedlisp.Environment;
 
 public class Print extends Function {
     public Print() {
@@ -12,10 +13,11 @@ public class Print extends Function {
     }
 
     @Override
-	public Object execute(State s, ListExpression params) throws Exception {
-        Object value = getVariable(s,0);
-        System.out.print(value);
-        return value;
+	public Object execute(Environment s, List params) throws Exception {
+        Object v = s.evaluate(params.get(0));
+        System.out.print(v);
+        System.out.flush();
+        return v;
     }
 
     @Override

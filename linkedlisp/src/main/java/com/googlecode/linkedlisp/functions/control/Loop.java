@@ -2,22 +2,22 @@ package com.googlecode.linkedlisp.functions.control;
 
 import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.Expression;
-import com.googlecode.linkedlisp.State;
+import com.googlecode.linkedlisp.Environment;
+import java.util.List;
 
 public class Loop extends Function {
 
     @Override
-	public Object execute(State s, ListExpression params) throws Exception {
+	public Object execute(Environment s, List params) throws Exception {
 		Object lastResult = null;
 
 		// If the first result is not null, continue on
 		// and evaluate all the other parameters
-		while (null != params.get(0).evaluate(s))
+		while (null != s.evaluate(params.get(0)))
 		{
 			for (int i = 1; i < params.size(); i++)
 			{
-				lastResult = params.get(i).evaluate(s);
+				lastResult = s.evaluate(params.get(i));
 			}
         }
 

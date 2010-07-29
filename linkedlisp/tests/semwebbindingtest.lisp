@@ -17,4 +17,7 @@
     (write-line (get tw:James_McCusker foaf:name))
     (write-line (get tw:James_McCusker eg:name))
     (write-line (get tw:James_McCusker eg:test))
+
+    (defun testFn (person) (write-line (get person foaf:name)))
+    (testFn tw:James_McCusker)
 )

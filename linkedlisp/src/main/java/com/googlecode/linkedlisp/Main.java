@@ -2,6 +2,7 @@ package com.googlecode.linkedlisp;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 import org.antlr.runtime.ANTLRInputStream;
@@ -19,7 +20,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 public class Main {
         
     public static void main(String[] args) throws Exception {
-        State state = new State();
+        Environment state = new Environment();
         MakeModel modelMaker = new MakeModel();
 
         state.setModel((Model)modelMaker.execute(state, new ListExpression()));
@@ -31,15 +32,15 @@ public class Main {
                 
         String[] justArgs = new String[args.length-1];
         System.arraycopy(args, 1, justArgs, 0, justArgs.length);
-        ListExpression arguments = parseArgs(justArgs);
-        state.getGlobalVariables().put("args", arguments.getValue());
+        List arguments = parseArgs(justArgs);
+        state.setVariable("args", arguments);
 
         
         Object result = run(state, new FileInputStream(args[0]));
         if (result != null) System.out.println(result.toString());
     }
 
-    private static ListExpression parseArgs(String[] args) throws RecognitionException {
+    private static List parseArgs(String[] args) throws RecognitionException {
         StringBuilder sb = new StringBuilder();
         sb.append("(");
         for (String s : args) {
@@ -55,22 +56,18 @@ public class Main {
         return parser.listExp();
     }
 
-    private static Object run(State state, InputStream is) throws Exception {
+    private static Object run(Environment state, InputStream is) throws Exception {
         ANTLRInputStream in = new ANTLRInputStream(is);
         LinkedLispLexer lexer = new LinkedLispLexer(in);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         LinkedLispParser parser = new LinkedLispParser(tokens);
         
-        Expression program = parser.eval();
+        Object program = parser.eval();
 
         if(parser.getNumberOfSyntaxErrors() > 0)
         	throw new RuntimeException("found " + parser.getNumberOfSyntaxErrors() + " syntax error(s)");
         
-        try {
-            Object result = program.evaluate(state);
-            return result;
-        } catch (NoReturnException e) {
-            return null;
-        }
+        Object result = state.evaluate(program);
+        return result;
     }
 }

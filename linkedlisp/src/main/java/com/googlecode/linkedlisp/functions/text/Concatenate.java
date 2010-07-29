@@ -1,17 +1,17 @@
 package com.googlecode.linkedlisp.functions.text;
 
-import com.googlecode.linkedlisp.Expression;
+import java.util.List;
+
+import com.googlecode.linkedlisp.Environment;
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
-import com.googlecode.linkedlisp.State;
 
 public class Concatenate extends Function {
 
     @Override
-	public Object execute(State s, ListExpression params) throws Exception {
+	public Object execute(Environment s, List params) throws Exception {
         StringBuilder result = new StringBuilder();
-        for (Expression exp : params)  {
-            Object o = exp.evaluate(s);
+        for (Object exp : params)  {
+            Object o = s.evaluate(exp);
             if (o != null) result.append(o.toString());
         }
         return result;
