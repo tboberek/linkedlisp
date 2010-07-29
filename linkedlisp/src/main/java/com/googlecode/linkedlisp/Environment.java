@@ -18,7 +18,6 @@ import com.hp.hpl.jena.reasoner.rulesys.Rule;
 public class Environment {
 
     private Model baseModel = null;
-    private Environment parentState = null;
     private Map<String, Object> variables = new HashMap<String,Object>();
     private InfModel model;
     
@@ -41,7 +40,7 @@ public class Environment {
     }
     
     public InfModel getModel() {
-        if (parentState == null)
+        if (parentEnvironment == null)
             return model;
         else return parentEnvironment.getModel();
     }
@@ -65,17 +64,13 @@ public class Environment {
     public Environment getParentEnvironment() {
         return parentEnvironment;
     }
-    
-    public Environment getParentState() {
-        return parentState;
-    }
-    
+
     public String processPrefix(String s) {
         String[] parsed = s.split(":",2);
         if (parsed.length > 1 ) {
             if (getPrefixes().containsKey(parsed[0]))
                 return getPrefixes().get(parsed[0])+parsed[1];
-            else if (parentState != null 
+            else if (parentEnvironment != null 
                 && parentEnvironment.getPrefixes().containsKey(parsed[0]))
                 return parentEnvironment.getPrefixes().get(parsed[0])+parsed[1];
         }
@@ -86,15 +81,6 @@ public class Environment {
         Object value = null;
         if (getVariables().containsKey(name)) {
             value = getVariables().get(name);
-//            if (value instanceof Symbol && parentState != null) {
-//                String nameInParent = value.toString();
-//                value = parentState.getVariable(nameInParent);            
-//            } else if (value instanceof Expression) {
-//                Environment forEval = this;
-//                if (this.parentState != null) forEval = this.parentState;
-//                value = ((Expression)value).evaluate(forEval);
-//                getVariables().put(name, value);
-//            }
         } else if (parentEnvironment != null){
             value = parentEnvironment.getVariable(name);
         }
@@ -116,7 +102,6 @@ public class Environment {
 	
     public Environment copyForCall(List params, List paramNames, Environment parentEnvironment) {
         Environment copy =  new Environment(model);
-        copy.parentState = this;
         copy.parentEnvironment = parentEnvironment;
 
         if (params != null && paramNames != null) {
@@ -131,7 +116,6 @@ public class Environment {
 
     public Environment copyForScope(List mappings, Environment parentEnvironment) throws Exception {
         Environment copy =  new Environment(model);
-        copy.parentState = this;
         copy.parentEnvironment = parentEnvironment;
 
         for (Object mapping : mappings) {
