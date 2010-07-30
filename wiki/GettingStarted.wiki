@@ -1,4 +1,5 @@
 #summary A 5 minute introduction to Linked LISP
+#labels Featured
 
 = Introduction =
 
