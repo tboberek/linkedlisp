@@ -1,0 +1,59 @@
+# Built-in functions in Linked LISP.
+
+==Control Flow==
+  * [if]
+  * [loop]
+  * [for]
+  * [progn]
+  * [defun]
+  * [lambda]
+  * [QUOTE]
+  * [eval]
+  * [let]
+  * [setf]
+  * [new]
+  * [unset]
+  * [get]
+  * [set]
+
+==Lists==
+  * [first]
+  * [rest]
+  * [last]
+  * [append]
+  * [seq]
+  * [length]
+
+==Text==
+  * [concatenate]
+  * [split]
+  * [replace]
+
+==Input/Output==
+  * [write_line write-line]
+  * [print]
+
+==Semantic Web==
+  * [find]
+  * [load]
+  * [save]
+  * [prefix]
+  * [builtin]
+  * [rule]
+  * [bind]
+  * [model.mem]
+  * [model.tdb]
+  * [model.let]
+
+==Math==
+  * [plus +]
+  * [minus -]
+  * [multiply *]
+  * [divide /]
+  * [modulus %]
+  * [equals =]
+
+==Boolean==
+  * [and]
+  * [or]
+  * [not]
