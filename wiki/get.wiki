@@ -19,7 +19,7 @@ To get the values for all statements relating to eg:foo, do the following:
 (get eg:foo)
 }}}
 
-This will return a list of triples (subject predicate object) where eg:foo is the subject.
+This will return a list of triples (subject predicate object) where eg:foo is the subject. For more control over triple matching, see [find].
 
 To get a value from a Java map:
 
