@@ -1,3 +1,3 @@
 (progn
- (loop (+ 1 1)
+ (loop 
   (write-line "Hello")))

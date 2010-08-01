@@ -1,4 +1,3 @@
 (progn
- (loop
-  for i from 1 to 10
+ (loop 
   do (write-line "Hello")))
