@@ -11,7 +11,7 @@ public abstract class ArithmeticFunction extends Function {
 		Double result = 0d;
 
         for (Object exp : params)  {
-			Double factor = s.resolveAsFloat(exp);
+			Double factor = Double.valueOf(s.evaluate(exp).toString());
 			result = operation(result, factor);
         }
 
