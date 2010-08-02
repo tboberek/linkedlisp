@@ -9,6 +9,7 @@
  (defun eval  java:com.googlecode.linkedlisp.functions.Evaluate)
  (defun lambda  java:com.googlecode.linkedlisp.functions.Lambda)
  (defun let  java:com.googlecode.linkedlisp.functions.Let)
+ (defun let*  java:com.googlecode.linkedlisp.functions.LetStar)
  (defun setf java:com.googlecode.linkedlisp.functions.Setf)
  (defun get  java:com.googlecode.linkedlisp.functions.Get)
  (defun set  java:com.googlecode.linkedlisp.functions.Set)
