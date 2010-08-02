@@ -7,6 +7,7 @@
  (defun for java:com.googlecode.linkedlisp.functions.control.For)
 
  (defun eval  java:com.googlecode.linkedlisp.functions.Evaluate)
+ (defun include  java:com.googlecode.linkedlisp.functions.Include)
  (defun lambda  java:com.googlecode.linkedlisp.functions.Lambda)
  (defun let  java:com.googlecode.linkedlisp.functions.Let)
  (defun let*  java:com.googlecode.linkedlisp.functions.LetStar)
