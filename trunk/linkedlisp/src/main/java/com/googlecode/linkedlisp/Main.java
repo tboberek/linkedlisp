@@ -2,6 +2,7 @@ package com.googlecode.linkedlisp;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,12 @@ public class Main {
 
         Include.initializePath(args[0], state);
         Object result = run(state, new FileInputStream(args[0]));
+        if (result instanceof Function) {
+            List toEval = new ArrayList();
+            toEval.add(0,result);
+            toEval.addAll(1, arguments);
+            result = state.evaluate(toEval);
+        }
         if (result != null) System.out.println(result.toString());
     }
 
