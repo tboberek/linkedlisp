@@ -10,6 +10,7 @@ import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import com.googlecode.linkedlisp.functions.Defun;
+import com.googlecode.linkedlisp.functions.Include;
 import com.googlecode.linkedlisp.functions.semantic.MakeModel;
 import com.googlecode.linkedlisp.functions.Progn;
 import com.googlecode.linkedlisp.parser.LinkedLispLexer;
@@ -35,7 +36,7 @@ public class Main {
         List arguments = parseArgs(justArgs);
         state.setVariable("args", arguments);
 
-        
+        Include.initializePath(args[0], state);
         Object result = run(state, new FileInputStream(args[0]));
         if (result != null) System.out.println(result.toString());
     }

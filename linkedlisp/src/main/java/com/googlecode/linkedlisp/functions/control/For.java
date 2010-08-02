@@ -1,6 +1,7 @@
 package com.googlecode.linkedlisp.functions.control;
 
 import com.googlecode.linkedlisp.Function;
+import com.googlecode.linkedlisp.Symbol;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +17,8 @@ public class For extends Function {
         // Skip param 1, as this is the "in"
         Iterable it = (Iterable) s.evaluate(params.get(2));
         Object exec = params.get(3);
+        if (exec instanceof Symbol && exec.toString().equals("do"))
+            exec = params.get(4);
         Environment sPrime = s.copyForScope(new LinkedList(), s);
         Object lastResult = null;
         for (Object val : it) {
