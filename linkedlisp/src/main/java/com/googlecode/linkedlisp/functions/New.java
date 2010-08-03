@@ -76,9 +76,4 @@ public class New extends Function {
     	}
     }
 
-    @Override
-    public Object getValue() {
-        return "new";
-    }
-
 }

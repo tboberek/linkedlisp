@@ -5,9 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.Environment;
-import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -57,10 +55,4 @@ public class Find extends Function {
             return s.getModel().createTypedLiteral(o);
         }
     }
-
-    @Override
-    public Object getValue() {
-        return "find";
-    }
-
 }

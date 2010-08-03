@@ -1,13 +1,9 @@
 package com.googlecode.linkedlisp.functions.list;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.lang.reflect.Array;
 
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.Environment;
 import com.hp.hpl.jena.rdf.model.RDFList;
 
@@ -35,10 +31,4 @@ public class Last extends Function {
             else return null;
         } else return value;
     }
-
-    @Override
-    public Object getValue() {
-        return "last";
-    }
-
 }

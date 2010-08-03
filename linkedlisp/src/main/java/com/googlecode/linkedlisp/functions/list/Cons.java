@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.Environment;
 
 public class Cons extends Function {
@@ -17,11 +16,6 @@ public class Cons extends Function {
         if (cdr != null)
             result.addAll((Collection)cdr);
         return result;
-    }
-
-    @Override
-    public Object getValue() {
-        return "cons";
     }
 
 }

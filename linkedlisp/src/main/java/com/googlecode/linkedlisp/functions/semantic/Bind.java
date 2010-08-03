@@ -12,16 +12,18 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 public class Bind extends Function {
 
-    private Builtin builtin = new Builtin();
-    private Rule rule = new Rule();
+    private final Builtin builtin = new Builtin();
+    private final Rule rule = new Rule();
     
-    public void setEnvironment(Environment environment) {
+    @Override
+	public void setEnvironment(Environment environment) {
         super.setEnvironment(environment);
         builtin.setEnvironment(environment);
         rule.setEnvironment(environment);
     }
     
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
     public Object execute(Environment s, List params) throws Exception {
         Resource property = s.resolveAsResource(s.evaluate(params.get(0)));
         String name = "binding"+UUID.randomUUID().toString();
@@ -72,11 +74,6 @@ public class Bind extends Function {
         r.add(r.size(), body);
         
         return rule.execute(s, r);
-    }
-
-    @Override
-    public Object getValue() {
-        return "builtin";
     }
 
 }

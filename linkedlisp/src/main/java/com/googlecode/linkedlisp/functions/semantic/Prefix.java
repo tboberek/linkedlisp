@@ -3,10 +3,8 @@ package com.googlecode.linkedlisp.functions.semantic;
 import java.util.List;
 
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.Environment;
 import com.hp.hpl.jena.rdf.model.Resource;
-import java.util.List;
 
 public class Prefix extends Function {
 
@@ -31,10 +29,4 @@ public class Prefix extends Function {
 
         return null;
     }
-
-    @Override
-    public Object getValue() {
-        return "prefix";
-    }
-
 }

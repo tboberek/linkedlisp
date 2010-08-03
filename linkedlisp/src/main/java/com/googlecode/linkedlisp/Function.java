@@ -34,5 +34,10 @@ public abstract class Function {
         return getValue().toString();
     }
     
-    public abstract Object getValue();
+    
+    public Object getValue() {
+    	// default to function with same name as class
+    	String ret = getClass().getSimpleName().toLowerCase();
+    	return ret;
+    }
 }

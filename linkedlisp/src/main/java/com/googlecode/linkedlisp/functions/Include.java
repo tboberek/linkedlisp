@@ -50,10 +50,4 @@ public class Include extends Function {
         }
         throw new RuntimeException("Cannot find script "+name);
     }
-
-    @Override
-    public Object getValue() {
-        return "include";
-    }
-
 }

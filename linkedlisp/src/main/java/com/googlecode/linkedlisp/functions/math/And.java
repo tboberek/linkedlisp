@@ -1,7 +1,6 @@
 package com.googlecode.linkedlisp.functions.math;
 
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.Environment;
 import java.util.List;
 
@@ -23,11 +22,6 @@ public class And extends Function {
 
 		// Return our calculated value
 		return result;
-	}
-
-	@Override
-	public Object getValue() {
-		return "or";
 	}
 }
 

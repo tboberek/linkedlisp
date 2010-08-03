@@ -46,13 +46,13 @@ public class Get extends Function {
                     result.add(node.as(Resource.class));
                 }
             }
-            return result.size() == 0 ? null : 
+            return result.size() == 0 ? null :
                 (result.size() == 1 ? result.get(0) : result);
         } else {
             List<Object> result = new ArrayList<Object>();
             for (Statement stmt : subject.listProperties().toList()) {
                 RDFNode object = stmt.getObject();
-                Object value = object.isLiteral() 
+                Object value = object.isLiteral()
                             ? object.as(Literal.class).getValue()
                             : object.as(Resource.class);
                 result.add(Arrays.asList(new Object[] {
@@ -67,11 +67,6 @@ public class Get extends Function {
     private Object getJava(Object value, Environment s, List params) {
         // TODO Auto-generated method stub
         return null;
-    }
-
-    @Override
-    public Object getValue() {
-        return "get";
     }
 
 }

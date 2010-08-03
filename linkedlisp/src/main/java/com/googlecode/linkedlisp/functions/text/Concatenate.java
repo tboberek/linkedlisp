@@ -16,10 +16,4 @@ public class Concatenate extends Function {
         }
         return result;
     }
-    
-    @Override
-    public Object getValue() {
-        return "concatenate";
-    }
-
 }

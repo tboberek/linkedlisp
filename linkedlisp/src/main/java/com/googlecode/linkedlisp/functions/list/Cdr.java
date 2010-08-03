@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.List;
 
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.Environment;
 import com.hp.hpl.jena.rdf.model.RDFList;
 
@@ -37,11 +36,6 @@ public class Cdr extends Function {
                 return ((String)value).substring(1);
             else return null;
         } else return value;
-    }
-
-    @Override
-    public Object getValue() {
-        return "cdr";
     }
 
 }

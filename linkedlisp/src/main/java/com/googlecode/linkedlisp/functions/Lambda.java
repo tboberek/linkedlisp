@@ -2,9 +2,8 @@ package com.googlecode.linkedlisp.functions;
 
 import java.util.List;
 
-import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.Environment;
+import com.googlecode.linkedlisp.Function;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 @SuppressWarnings({ "unchecked", "unused" })
@@ -32,10 +31,4 @@ public class Lambda extends Function {
         }
         return null;
     }
-
-    @Override
-    public Object getValue() {
-        return "lambda";
-    }
-
 }

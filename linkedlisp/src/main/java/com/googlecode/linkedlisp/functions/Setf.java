@@ -12,13 +12,8 @@ public class Setf extends Function {
     @SuppressWarnings("unchecked")
     @Override
 	public Object execute(Environment s, List params) throws Exception {
-		String name = params.get(0).toString();	
+		String name = params.get(0).toString();
 		return s.setVariable (name, s.evaluate(params.get(1)));
-    }
-
-    @Override
-    public Object getValue() {
-        return "setf";
     }
 
 }

@@ -15,7 +15,8 @@ import com.hp.hpl.jena.reasoner.rulesys.Functor;
 
 public class Rule extends Function {
 
-    public Object execute(Environment s, List params) throws Exception {
+    @Override
+	public Object execute(Environment s, List params) throws Exception {
         
         String name = params.get(0).toString();
         List<ClauseEntry> a = buildClauses((List)params.get(1), s);
@@ -80,11 +81,6 @@ public class Rule extends Function {
         } else {
             return s.getModel().createTypedLiteral(s.evaluate(exp)).asNode();
         }
-    }
-
-    @Override
-    public Object getValue() {
-        return "rule";
     }
 
 }

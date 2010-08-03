@@ -1,7 +1,6 @@
 package com.googlecode.linkedlisp.functions.control;
 
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.Environment;
 import java.util.List;
 
@@ -15,11 +14,6 @@ public class If extends Function {
         } else if (params.size() > 2) {
             return s.evaluate(params.get(2));
         } else return null;
-    }
-
-    @Override
-    public Object getValue() {
-        return "if";
     }
 
 }
