@@ -24,4 +24,9 @@ public class TestBean {
 		return lastName + ", " + firstName;
 	}
 
+	@org.junit.Test
+	public void testBean() {
+	    // Empty test method, because everything seems to be a test here.
+	}
+	
 }
