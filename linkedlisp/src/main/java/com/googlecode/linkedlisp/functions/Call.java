@@ -36,8 +36,8 @@ public class Call extends Function {
         	  
 		} else {
 			// object methodname args
-			instance = obj;
-			clazz = obj.getClass();
+			instance = s.evaluate(obj);
+			clazz = instance.getClass();
 		}
 		
 		String methodName = params.get(1).toString();

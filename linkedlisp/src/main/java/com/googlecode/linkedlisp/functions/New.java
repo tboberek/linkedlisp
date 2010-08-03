@@ -13,8 +13,9 @@ public class New extends Function {
     @Override
 	public Object execute(Environment s, List params) throws Exception {
         Object value = s.evaluate(params.get(0));
-        if (value instanceof Class){
-            return newJava((Class)value, s, params);
+
+        if (value instanceof Resource && ( (Resource)value).getURI().startsWith("java://")){
+            return newJava(Class.forName(((Resource)value).getURI().substring(7)), s, params);
         } else {
             return newSemantic(value.toString(), s, params);
         }
