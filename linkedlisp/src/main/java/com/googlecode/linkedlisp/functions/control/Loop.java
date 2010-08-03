@@ -1,7 +1,7 @@
 package com.googlecode.linkedlisp.functions.control;
 
-import com.googlecode.linkedlisp.Function;
 import com.googlecode.linkedlisp.Environment;
+import com.googlecode.linkedlisp.Function;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -33,7 +33,7 @@ public class Loop extends Function {
 			}
 
 			// Get the name for the block
-			blockName = s.evaluate(params.get(1)).toString();
+			blockName = params.get(1).toString();
 
 			// Get the remaining expressions after we clear
 			// out our named clause
@@ -65,16 +65,6 @@ public class Loop extends Function {
 		}
 		else if (firstString.equals("do"))
 		{
-			// Short form with a do - make sure we
-			// don't have a name, and that our next
-			// param is a list
-			if (blockName != null)
-			{
-				String error = "found expression where LOOP keyword " +
-					"expected.";
-
-				throw new RuntimeException (error);
-			}
 			if (!(params.get(1) instanceof List))
 			{
 				String paramString = params.get(1).toString();
@@ -207,5 +197,4 @@ public class Loop extends Function {
 
 		return null;
 	}
-
 }
