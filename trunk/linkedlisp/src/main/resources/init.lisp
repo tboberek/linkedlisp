@@ -57,5 +57,5 @@
 
  (defun = java:com.googlecode.linkedlisp.functions.math.Equal)
  
- (defun assert java:com.googlecode.linkedlisp.functions.test.Assert)
+;; (defun assert java:com.googlecode.linkedlisp.functions.testing.Assert)
 )
