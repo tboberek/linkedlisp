@@ -18,7 +18,7 @@ import com.hp.hpl.jena.reasoner.rulesys.Rule;
 public class Environment {
 
     private Model baseModel = null;
-    private Map<String, Object> variables = new HashMap<String,Object>();
+    private final Map<String, Object> variables = new HashMap<String,Object>();
     private InfModel model;
     
     private Environment parentEnvironment = null;
@@ -57,7 +57,7 @@ public class Environment {
         try {
             getModel().setNsPrefix(prefix, uri);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
     
@@ -70,7 +70,7 @@ public class Environment {
         if (parsed.length > 1 ) {
             if (getPrefixes().containsKey(parsed[0]))
                 return getPrefixes().get(parsed[0])+parsed[1];
-            else if (parentEnvironment != null 
+            else if (parentEnvironment != null
                 && parentEnvironment.getPrefixes().containsKey(parsed[0]))
                 return parentEnvironment.getPrefixes().get(parsed[0])+parsed[1];
         }
@@ -89,7 +89,7 @@ public class Environment {
     }
 
 	public Object setVariable(String name, Object value) throws Exception {
-	    if (parentEnvironment != null 
+	    if (parentEnvironment != null
 	            && parentEnvironment.getVariable(name) != null) {
 	        parentEnvironment.setVariable(name, value);
 	    } else {

@@ -8,7 +8,8 @@ import com.googlecode.linkedlisp.ListExpression;
 
 public class Let extends Function {
 
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
     public Object execute(Environment s, List params) throws Exception {
         
         Object x = params.get(0);
@@ -16,11 +17,6 @@ public class Let extends Function {
         Environment sPrime = s.copyForScope((ListExpression)x, s);
         Object execution = params.get(1);
         return sPrime.evaluate(execution);
-    }
-
-    @Override
-    public Object getValue() {
-        return "let";
     }
 
 }

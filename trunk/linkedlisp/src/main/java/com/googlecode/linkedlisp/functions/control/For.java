@@ -6,7 +6,6 @@ import com.googlecode.linkedlisp.Symbol;
 import java.util.LinkedList;
 import java.util.List;
 import com.googlecode.linkedlisp.Environment;
-import com.googlecode.linkedlisp.functions.Let;
 
 public class For extends Function {
 
@@ -26,11 +25,6 @@ public class For extends Function {
             lastResult = sPrime.evaluate(exec);
         }
 		return lastResult;
-    }
-
-    @Override
-    public Object getValue() {
-        return "for";
     }
 
 }

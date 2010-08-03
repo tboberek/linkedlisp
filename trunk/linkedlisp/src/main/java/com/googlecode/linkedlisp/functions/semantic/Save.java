@@ -4,10 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.Environment;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.FileManager;
 import java.util.List;
 
 public class Save extends Function {
@@ -23,11 +20,6 @@ public class Save extends Function {
         } catch (FileNotFoundException e) {
             return null;
         }
-    }
-
-    @Override
-    public Object getValue() {
-        return "save";
     }
 
 }

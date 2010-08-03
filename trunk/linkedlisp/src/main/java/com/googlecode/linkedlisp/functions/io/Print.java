@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.Environment;
 
 public class Print extends Function {
@@ -18,11 +17,6 @@ public class Print extends Function {
         System.out.print(v);
         System.out.flush();
         return v;
-    }
-
-    @Override
-    public Object getValue() {
-        return "print";
     }
 
 }

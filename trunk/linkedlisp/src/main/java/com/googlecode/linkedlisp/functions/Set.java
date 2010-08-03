@@ -51,9 +51,4 @@ public class Set extends Function {
         return null;
     }
 
-    @Override
-    public Object getValue() {
-        return "set";
-    }
-
 }

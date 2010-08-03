@@ -9,7 +9,8 @@ public class Defun extends Function {
 
     private final Lambda lambda = new Lambda();
     
-    public void setEnvironment(Environment environment) {
+    @Override
+	public void setEnvironment(Environment environment) {
         super.setEnvironment(environment);
         lambda.setEnvironment(environment);
     }
@@ -22,10 +23,4 @@ public class Defun extends Function {
         s.setVariable(name, function);
         return null;
     }
-
-    @Override
-    public Object getValue() {
-        return "defun";
-    }
-
 }

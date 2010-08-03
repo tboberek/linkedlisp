@@ -17,10 +17,5 @@ public class Progn extends Function {
         }
         return result;
     }
-    
-    @Override
-    public Object getValue() {
-        return "progn";
-    }
 
 }

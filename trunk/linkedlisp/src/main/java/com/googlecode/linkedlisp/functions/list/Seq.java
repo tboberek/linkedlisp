@@ -1,7 +1,6 @@
 package com.googlecode.linkedlisp.functions.list;
 
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.Environment;
 import com.googlecode.linkedlisp.util.Sequence;
 import java.util.List;
@@ -24,11 +23,6 @@ public class Seq extends Function {
             increment = (Number) s.evaluate(params.get(2));
         }
         return new Sequence(start, end, increment);
-    }
-
-    @Override
-    public Object getValue() {
-        return "seq";
     }
 
 }

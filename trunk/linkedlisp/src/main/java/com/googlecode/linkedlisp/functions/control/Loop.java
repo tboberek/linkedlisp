@@ -1,7 +1,6 @@
 package com.googlecode.linkedlisp.functions.control;
 
 import com.googlecode.linkedlisp.Function;
-import com.googlecode.linkedlisp.ListExpression;
 import com.googlecode.linkedlisp.Environment;
 import java.util.List;
 import java.util.LinkedList;
@@ -11,7 +10,7 @@ public class Loop extends Function {
 	private String blockName = null;
 
     @Override
-	public Object execute(Environment s, List params) throws Exception 
+	public Object execute(Environment s, List params) throws Exception
    	{
 		// Get the first object in our param list
 		Object firstParam = params.get(0);
@@ -40,7 +39,7 @@ public class Loop extends Function {
 			// out our named clause
 			List remaining = params.subList (2, params.size());
 
-			// Execute with the remaining 
+			// Execute with the remaining
 			return execute (s, remaining);
 			}
 		else if (firstString.equals("for"))
@@ -67,7 +66,7 @@ public class Loop extends Function {
 		else if (firstString.equals("do"))
 		{
 			// Short form with a do - make sure we
-			// don't have a name, and that our next 
+			// don't have a name, and that our next
 			// param is a list
 			if (blockName != null)
 			{
@@ -75,7 +74,7 @@ public class Loop extends Function {
 					"expected.";
 
 				throw new RuntimeException (error);
-			}	
+			}
 			if (!(params.get(1) instanceof List))
 			{
 				String paramString = params.get(1).toString();
@@ -90,16 +89,16 @@ public class Loop extends Function {
 
 			return ShortForm (s, params);
 		}
-		else 
+		else
 		{
-			String errorString = firstString + 
+			String errorString = firstString +
 				" is an unknown keyword for loop.";
 		   
-			throw new RuntimeException(errorString);	
+			throw new RuntimeException(errorString);
 		}
     }
 
-	private Object ForIn (Object ctrlVar, List params, Environment s) 
+	private Object ForIn (Object ctrlVar, List params, Environment s)
 		throws Exception
 	{
 		// Verify that we actually have a "in" and "do", and
@@ -137,7 +136,7 @@ public class Loop extends Function {
 
 	}
 
-	private Object ForFrom (Object ctrlVar, List params, Environment s) 
+	private Object ForFrom (Object ctrlVar, List params, Environment s)
 		throws Exception
 	{
 		// Verify that we actually have a "to" and "do", and
@@ -157,7 +156,7 @@ public class Loop extends Function {
 			throw new RuntimeException(error);
 		}
 
-		// Now we should have two integers for the control 
+		// Now we should have two integers for the control
 		// variable
 		Integer start = Integer.valueOf(params.get(0).toString ());
 		Integer end	  = Integer.valueOf(params.get(2).toString ());
@@ -191,13 +190,13 @@ public class Loop extends Function {
 	private Object ShortForm (Environment s, List params) throws Exception
 	{
 		// Short-form loop - simply repeates forever
-		try 
+		try
 		{
 			while (true)
 			{
 				for (Object exp : params)
 				{
-				s.evaluate(exp);	
+				s.evaluate(exp);
 				}
 			}
 		}
@@ -207,11 +206,6 @@ public class Loop extends Function {
 		}
 
 		return null;
-	}	
-
-    @Override
-    public Object getValue() {
-        return "loop";
-    }
+	}
 
 }

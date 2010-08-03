@@ -50,9 +50,4 @@ public class UnSet extends Function {
         return null;
     }
 
-    @Override
-    public Object getValue() {
-        return "unset";
-    }
-
 }
