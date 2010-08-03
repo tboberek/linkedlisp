@@ -4,20 +4,19 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
+
 import com.googlecode.linkedlisp.functions.Defun;
 import com.googlecode.linkedlisp.functions.Include;
-import com.googlecode.linkedlisp.functions.semantic.MakeModel;
 import com.googlecode.linkedlisp.functions.Progn;
+import com.googlecode.linkedlisp.functions.semantic.MakeModel;
 import com.googlecode.linkedlisp.parser.LinkedLispLexer;
 import com.googlecode.linkedlisp.parser.LinkedLispParser;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class Main {
         
@@ -48,7 +47,7 @@ public class Main {
         if (result != null) System.out.println(result.toString());
     }
 
-    private static List parseArgs(String[] args) throws RecognitionException {
+    static List parseArgs(String[] args) throws RecognitionException {
         StringBuilder sb = new StringBuilder();
         sb.append("(");
         for (String s : args) {
@@ -64,7 +63,7 @@ public class Main {
         return parser.listExp();
     }
 
-    private static Object run(Environment state, InputStream is) throws Exception {
+    static Object run(Environment state, InputStream is) throws Exception {
         ANTLRInputStream in = new ANTLRInputStream(is);
         LinkedLispLexer lexer = new LinkedLispLexer(in);
         CommonTokenStream tokens = new CommonTokenStream(lexer);

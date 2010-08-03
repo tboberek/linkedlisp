@@ -1,7 +1,10 @@
 package com.googlecode.linkedlisp;
 
-public class Symbol {
-    private String name;
+import java.io.Serializable;
+
+public class Symbol implements Serializable {
+	private static final long serialVersionUID = -5050278876640519892L;
+	private final String name;
 
     public Symbol(String value) {
         this.name = value;
