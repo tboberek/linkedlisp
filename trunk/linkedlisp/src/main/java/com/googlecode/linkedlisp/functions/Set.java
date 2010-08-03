@@ -3,8 +3,11 @@ package com.googlecode.linkedlisp.functions;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.beanutils.BeanUtils;
+
 import com.googlecode.linkedlisp.Environment;
 import com.googlecode.linkedlisp.Function;
+import com.googlecode.linkedlisp.ListExpression;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -18,6 +21,8 @@ public class Set extends Function {
             Object value = s.resolve(params.get(0));
             if (value instanceof Resource) {
                 return setSemantic((Resource)value, s, params);
+            } else if(value instanceof ListExpression) {
+            	return setJava(value, s, params);
             } else if (value instanceof List) {
                 int index = s.resolveAsInteger(s.evaluate(params.get(1))).intValue();
                 Object val = s.evaluate(params.get(2));
@@ -46,9 +51,11 @@ public class Set extends Function {
         return subject;
     }
 
-    private Object setJava(Object value, Environment s, List params) {
-        // TODO Auto-generated method stub
-        return null;
+    private Object setJava(Object bean, Environment s, List params) throws Exception {
+    	String name = s.evaluate(params.get(1)).toString();
+    	Object value = s.evaluate(params.get(2));
+    	BeanUtils.setProperty(bean, name, value);
+    	return null;
     }
 
 }

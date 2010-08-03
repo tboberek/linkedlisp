@@ -5,8 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.beanutils.BeanUtils;
+
 import com.googlecode.linkedlisp.Environment;
 import com.googlecode.linkedlisp.Function;
+import com.googlecode.linkedlisp.ListExpression;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -21,6 +24,8 @@ public class Get extends Function {
         Object value = s.resolve(params.get(0));
         if (value instanceof Resource) {
             return getSemantic((Resource)value, s, params);
+        } else if(value instanceof ListExpression) {
+        	return getJava(value, s, params);
         } else if (value instanceof List) {
             int index = s.resolveAsInteger(params.get(1)).intValue();
             return ((List)value).get(index);
@@ -64,9 +69,9 @@ public class Get extends Function {
         }
     }
 
-    private Object getJava(Object value, Environment s, List params) {
-        // TODO Auto-generated method stub
-        return null;
+    private Object getJava(Object bean, Environment s, List params) throws Exception {
+        String name = s.evaluate(params.get(1)).toString();
+    	return BeanUtils.getProperty(bean, name);
     }
 
 }
