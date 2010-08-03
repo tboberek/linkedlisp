@@ -37,8 +37,17 @@ public class Main {
         state.setVariable("args", arguments);
 
         Include.initializePath(args[0], state);
-        Object result = run(state, new FileInputStream(args[0]));
-        if (result instanceof Function) {
+        Object result = null;
+		if (args.length > 1 && args[0].equals("--ast"))
+		{
+			result = outputAST(state, new FileInputStream(args[1]));
+		}
+		else
+		{
+			result = run(state, new FileInputStream(args[0]));
+		}
+	
+		if (result instanceof Function) {
             List toEval = new ArrayList();
             toEval.add(0,result);
             toEval.addAll(1, arguments);
@@ -63,7 +72,8 @@ public class Main {
         return parser.listExp();
     }
 
-    static Object run(Environment state, InputStream is) throws Exception {
+	static Object parseFile(InputStream is) throws Exception
+	{
         ANTLRInputStream in = new ANTLRInputStream(is);
         LinkedLispLexer lexer = new LinkedLispLexer(in);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -72,9 +82,21 @@ public class Main {
         Object program = parser.eval();
 
         if(parser.getNumberOfSyntaxErrors() > 0)
-        	throw new RuntimeException("found " + parser.getNumberOfSyntaxErrors() + " syntax error(s)");
+        	throw new RuntimeException("found " + 
+					parser.getNumberOfSyntaxErrors() + " syntax error(s)");
+
+		return program;
+	}
+
+	static Object outputAST(Environment state, InputStream is) throws Exception
+	{
+		Object program = parseFile(is);
+		return program;
+	}
+
+    static Object run(Environment state, InputStream is) throws Exception {
         
-        Object result = state.evaluate(program);
-        return result;
+		Object program = parseFile(is);
+       	return state.evaluate(program);
     }
 }
