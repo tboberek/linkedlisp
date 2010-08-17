@@ -1,6 +1,16 @@
 #summary A 5 minute introduction to Linked LISP
 #labels Featured
 
+= Getting Linked LISP =
+
+Linked LISP is in pre-release, so the best way to get it is from subversion:
+
+{{{
+svn checkout http://linkedlisp.googlecode.com/svn/trunk/linkedlisp linkedlisp
+}}}
+
+Linked LISP requires Maven 2 and >= JDK 6. In the linkedlisp folder, run "./buildall.sh". You can now use the script "linkedlisp" to execute Linked LISP scripts. There are many examples in examples/.
+
 = Introduction =
 
 Linked LISP is LISP + [http://linkeddata.org Linked Data] + Java. That was easy. But what do we mean by that? Linked LISP is a LISP implementation that has a "baked-in" understanding of the Semantic Web and Linked Data. At its core is the Java library for the semantic web, [http://jena.sourceforge.net Jena], and allows users to collect and manipulate data that is published to the Semantic Web.
