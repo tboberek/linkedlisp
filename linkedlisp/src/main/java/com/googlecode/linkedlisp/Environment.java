@@ -100,13 +100,13 @@ public class Environment {
     
 	
 	
-    public Environment copyForCall(List params, List paramNames, Environment parentEnvironment) {
+    public Environment copyForCall(List params, List paramNames, Environment parentEnvironment) throws Exception {
         Environment copy =  new Environment(model);
         copy.parentEnvironment = parentEnvironment;
 
         if (params != null && paramNames != null) {
             for (int i=0; i< params.size() && i < paramNames.size(); ++i) {
-                Object parameter = resolve(params.get(i));
+                Object parameter = evaluate(params.get(i));
                 copy.variables.put(paramNames.get(i).toString(), parameter);
             }
         }

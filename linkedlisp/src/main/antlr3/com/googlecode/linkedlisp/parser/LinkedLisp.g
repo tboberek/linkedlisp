@@ -79,6 +79,7 @@ uri	returns [java.net.URI expr]
         }
     }
 	|	URI {try {
+		    String uriText = $URI.text;
             expr = new java.net.URI($URI.text);
         } catch (java.net.URISyntaxException e) {
             System.err.println(e.getMessage());

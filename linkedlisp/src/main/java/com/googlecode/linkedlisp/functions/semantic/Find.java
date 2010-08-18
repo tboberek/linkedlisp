@@ -17,10 +17,10 @@ public class Find extends Function {
     public Object execute(Environment state, List params) throws Exception {
         Resource s = null;
         if (params.size() > 0 && params.get(0) != null)
-            s = state.resolveAsResource(toResource(state.evaluate(params.get(0))));
+            s = state.resolveAsResource(state.evaluate(params.get(0)));
         Property p = null;
         if (params.size() > 1 && params.get(1) != null)
-            p = state.resolveAsResource(toResource(state.evaluate(params.get(1)))).as(Property.class);
+            p = state.resolveAsResource(state.evaluate(params.get(1))).as(Property.class);
         RDFNode o = null;
         if (params.size() > 2 && params.get(2) != null)
             o = toNode(toResource(state.evaluate(params.get(2))), state);
