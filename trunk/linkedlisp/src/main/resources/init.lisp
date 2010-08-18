@@ -17,6 +17,7 @@
  (defun new  java:com.googlecode.linkedlisp.functions.New)
  (defun call  java:com.googlecode.linkedlisp.functions.Call)
  (defun unset  java:com.googlecode.linkedlisp.functions.UnSet)
+ (defun is-resource  java:com.googlecode.linkedlisp.functions.IsResource)
 
  (defun QUOTE  java:com.googlecode.linkedlisp.functions.list.Quote)
  (defun cons  java:com.googlecode.linkedlisp.functions.list.Cons)
@@ -56,6 +57,13 @@
  (defun not java:com.googlecode.linkedlisp.functions.math.Not)
 
  (defun = java:com.googlecode.linkedlisp.functions.math.Equal)
+ 
+ (defun list java:com.googlecode.linkedlisp.functions.list.CreateList)
+ (defun push java:com.googlecode.linkedlisp.functions.list.Push)
+ (defun pop java:com.googlecode.linkedlisp.functions.list.Pop)
+ (defun peek java:com.googlecode.linkedlisp.functions.list.Peek)
+ (defun offer java:com.googlecode.linkedlisp.functions.list.Offer)
+ (defun poll java:com.googlecode.linkedlisp.functions.list.Poll)
  
 ;; (defun assert java:com.googlecode.linkedlisp.functions.testing.Assert)
 )
