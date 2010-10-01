@@ -3,7 +3,7 @@
 
 = Getting Linked LISP =
 
-Download Linked LISP as a binary (no need to compile) or as a source package from http://code.google.com/p/linkedlisp/downloads/list or get it from subversion:
+Download Linked LISP as a binary (no need to compile) or as a source package from http://code.google.com/p/linkedlisp/downloads/list or get the development branch from subversion:
 
 {{{
 svn checkout http://linkedlisp.googlecode.com/svn/trunk/linkedlisp linkedlisp
