@@ -3,13 +3,15 @@
 
 = Getting Linked LISP =
 
-Linked LISP is in pre-release, so the best way to get it is from subversion:
+Download Linked LISP as a binary (no need to compile) or as a source package from http://code.google.com/p/linkedlisp/downloads/list or get it from subversion:
 
 {{{
 svn checkout http://linkedlisp.googlecode.com/svn/trunk/linkedlisp linkedlisp
 }}}
 
-Linked LISP requires Maven 2 and >= JDK 6. In the linkedlisp folder, run "./buildall.sh". You can now use the script "linkedlisp" to execute Linked LISP scripts. There are many examples in examples/.
+Building Linked LISP requires Maven 2 and >= JDK 6. In the linkedlisp folder, run "./buildall.sh". You can now use the script "linkedlisp" to execute Linked LISP scripts. There are many examples in examples/.
+
+If you've downloaded the binary package, just unarchive it and continue below. If you're on Windows, the easiest way to work is through cygwin, as there aren't .bat files yet.
 
 = Introduction =
 
