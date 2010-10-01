@@ -17,6 +17,8 @@
  (defun new  java:com.googlecode.linkedlisp.functions.New)
  (defun call  java:com.googlecode.linkedlisp.functions.Call)
  (defun unset  java:com.googlecode.linkedlisp.functions.UnSet)
+ (defun quit  java:com.googlecode.linkedlisp.functions.Quit)
+ (defun exit  java:com.googlecode.linkedlisp.functions.Quit)
  (defun is-resource  java:com.googlecode.linkedlisp.functions.IsResource)
 
  (defun QUOTE  java:com.googlecode.linkedlisp.functions.list.Quote)

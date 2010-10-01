@@ -1,5 +1,6 @@
 package com.googlecode.linkedlisp;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
+
+import sun.nio.cs.StreamDecoder;
 
 import com.googlecode.linkedlisp.functions.Defun;
 import com.googlecode.linkedlisp.functions.Include;
@@ -31,29 +34,45 @@ public class Main {
         state.getVariables().put("progn", new Progn());
         run(state, Main.class.getResourceAsStream("/init.lisp"));
                 
-        String[] justArgs = new String[args.length-1];
-        System.arraycopy(args, 1, justArgs, 0, justArgs.length);
-        List arguments = parseArgs(justArgs);
-        state.setVariable("args", arguments);
-
-        Include.initializePath(args[0], state);
-        Object result = null;
-		if (args.length > 1 && args[0].equals("--ast"))
-		{
-			result = outputAST(state, new FileInputStream(args[1]));
-		}
-		else
-		{
-			result = run(state, new FileInputStream(args[0]));
-		}
-	
-		if (result instanceof Function) {
-            List toEval = new ArrayList();
-            toEval.add(0,result);
-            toEval.addAll(1, arguments);
-            result = state.evaluate(toEval);
+        if (args.length > 0) {
+            String[] justArgs = new String[args.length-1];
+            System.arraycopy(args, 1, justArgs, 0, justArgs.length);
+            List arguments = parseArgs(justArgs);
+            state.setVariable("args", arguments);
+            
+            Include.initializePath(args[0], state);
+            Object result = null;
+            if (args.length > 1 && args[0].equals("--ast"))
+            {
+                result = outputAST(state, new FileInputStream(args[1]));
+            }
+            else
+            {
+                result = run(state, new FileInputStream(args[0]));
+            }
+        
+            if (result instanceof Function) {
+                List toEval = new ArrayList();
+                toEval.add(0,result);
+                toEval.addAll(1, arguments);
+                result = state.evaluate(toEval);
+            }
+            if (result != null) System.out.println(result.toString());            
+        } else {
+            System.out.println("Linked LISP v. 0.9.0");
+            ANTLRInputStream in = new ANTLRInputStream(System.in);
+            LinkedLispLexer lexer = new LinkedLispLexer(in);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            LinkedLispParser parser = new LinkedLispParser(tokens);
+            
+            while (true) {
+                System.out.print("> ");
+                System.out.flush();
+                Object program = parser.eval();
+                Object result = state.evaluate(program);
+                if (result != null) System.out.println(result);
+            }
         }
-        if (result != null) System.out.println(result.toString());
     }
 
     static List parseArgs(String[] args) throws RecognitionException {
