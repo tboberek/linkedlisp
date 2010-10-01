@@ -1,0 +1,1 @@
+(let ((x 1) (y 0)) (progn (set x y) (write-line x) (let ((x 2)) (write-line x)) (write-line x)))

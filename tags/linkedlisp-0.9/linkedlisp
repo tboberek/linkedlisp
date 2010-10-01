@@ -1,0 +1,8 @@
+#!/bin/sh
+
+JAVA_OPTS="-Xmx2g"
+LIBDIR=target/dependency/
+CLASSPATH=`find $LIBDIR -name \*.jar -exec echo -n {}: ';'`:target/linkedlisp-1.0-SNAPSHOT.jar
+
+set -- "${@}"
+java $JAVA_OPTS -cp $CLASSPATH com.googlecode.linkedlisp.Main "$@"
